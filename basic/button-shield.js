@@ -13,24 +13,24 @@ var checkPathDefined = function(object, path) {
 
 
 var Shield = {
-	id: 4/*number!*/,
-	name: 'button',
-  delay: 5000,
-	safelet: function (payload) {
+  id: 4/*number!*/, 
+  name: 'button',
+  delay: 5000, 
+  safelet: function (payload) {
     /*buttonB1
     value == 'released/pressed'*/
     return payload.d.states.buttonB0.value === 'released';
-	},
+  },
 
-	entryCondition: function (payload) {
-	  return checkPathDefined(payload, 'd.states.buttonB0');
+  entryCondition: function (payload) {
+    return checkPathDefined(payload, 'd.states.buttonB0');
   },
 
   preProcessing: undefined,
 
-	message: function (payload) {
-		return constructMessage(
-		  payload,
+  message: function (payload) {
+    return constructMessage(
+      payload,
       Shield.id,
       'DemoHazard',
       'A demo shield activated!'
