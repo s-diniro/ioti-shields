@@ -1,15 +1,3 @@
-var checkPathDefined = function(object, path) {
-  var parts = path.split('.');
-  for(var i=0;i < parts.length; i++) {
-    var part = parts[i];
-    object = object[part];
-    if (!object) {
-      return false;
-    }
-  }
-  return true;
-};
-
 
 var Shield = {
   id: 5 /*must be a number*/,
@@ -21,7 +9,7 @@ var Shield = {
   },
 
   entryCondition: function (payload) {
-    return checkPathDefined(payload, 'd.states.contact');
+    return payload.d && payload.states && payload.states.contact !== undefined;
   },
 
   preProcessing: undefined,
