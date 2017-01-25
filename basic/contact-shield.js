@@ -9,7 +9,7 @@ var Shield = {
   },
 
   entryCondition: function (payload) {
-    return payload.d && payload.states && payload.states.contact !== undefined;
+    return payload.d && payload.d.states && payload.d.states.contact !== undefined;
   },
 
   preProcessing: undefined,
