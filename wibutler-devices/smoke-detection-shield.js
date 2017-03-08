@@ -1,4 +1,4 @@
-(function () {
+(function() {
   var shieldUuid = 99999;
   var shieldName = 'smoke-detection-shield';
   var hazardTitle = 'Smoke was detected!';
@@ -7,7 +7,7 @@
   var preProcessing = undefined;
 
   function safelet(payload) {
-    return (payload.cname === 'SMOKE');
+    return ((payload.cname === 'SMOKE')) && (payload.val === 1);
   }
 
   function entryCondition(payload) {

@@ -1,17 +1,17 @@
 (function() {
   var shieldUuid = 99999;
-  var shieldName = 'enocean-water-detection-shield';
+  var shieldName = 'wibutler-water-detection-shield';
   var hazardTitle = 'Water Leakage Detected';
 
   var delay = 5000;
   var preProcessing = undefined;
 
   function safelet(payload) {
-    return (payload.d.states.liquidDetected.value);
+    return ((payload.cname === 'WTRLEAK') && (payload.val === 1));
   }
 
   function entryCondition(payload) {
-    return (payload.d && payload.d.states && payload.d.states.liquidDetected);
+    return (payload.cname === 'WTRLEAK');
   }
 
   function message(payload) {
