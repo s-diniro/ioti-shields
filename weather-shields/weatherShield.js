@@ -9,8 +9,8 @@
   var tempMin = -10;
   var tempMax = 35;
 
-  function safe(payload) {
-    return ((payload.weatherData.temperature < shield.tempMin) || (payload.weatherData.temperature > shield.tempMax));
+  function safelet(payload) {
+    return ((payload.weatherData.temperature < tempMin) || (payload.weatherData.temperature > tempMax));
   }
 
   function entryCondition(payload) {
