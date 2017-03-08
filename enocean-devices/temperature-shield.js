@@ -6,8 +6,11 @@
   var delay = 5000;
   var preProcessing = undefined;
 
+  var lowerThreshold = 0;
+  var upperThreshold = 30;
+
   function safelet(payload) {
-    return (payload.d.states.temperature.value > 23);
+    return ((payload.d.states.temperature.value < lowerThreshold) || (payload.d.states.temperature.value > upperThreshold));
   }
 
   function entryCondition(payload) {
