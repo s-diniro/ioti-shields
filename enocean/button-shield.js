@@ -1,5 +1,5 @@
 (function() {
-  var shieldUuid = 9;
+  var shieldUuid = 99999;
   var shieldName = 'button-shield';
   var hazardTitle = 'Button {button} was pressed';
 
