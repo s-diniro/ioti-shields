@@ -15,7 +15,7 @@
         <parameter defaultValue="getSubmissionTimeValue(&quot;SOURCE_TOPIC&quot;)" metaType="Expression" name="SOURCE_TOPIC" optional="true" type="&lt;rstring>"/>
         <parameter defaultValue="getSubmissionTimeValue(&quot;NOTIFICATION_TOPIC&quot;)" metaType="Expression" name="NOTIFICATION_TOPIC" optional="true" type="&lt;rstring>"/>
         <parameter defaultValue="getSubmissionTimeValue(&quot;SINK_TOPIC&quot;)" metaType="Expression" name="SINK_TOPIC" optional="true" type="&lt;rstring>"/>
-        <parameter defaultValue="getSubmissionTimeValue(&quot;API_URL&quot;)" metaType="Expression" name="API_URL" optional="true" type="&lt;rstring>"/>
+        <parameter defaultValue="getSubmissionTimeValue(&quot;API_URL&quot;) + &quot;/&quot;" metaType="Expression" name="API_URL" optional="true" type="&lt;rstring>"/>
         <parameter defaultValue="getSubmissionTimeValue(&quot;API_TOKEN&quot;)" metaType="Expression" name="API_TOKEN" optional="true" type="&lt;rstring>"/>
         <parameter defaultValue="getSubmissionTimeValue(&quot;TENANT_ID&quot;)" metaType="Expression" name="TENANT_ID" optional="true" type="&lt;rstring>"/>
         <parameter defaultValue="getSubmissionTimeValue(&quot;DEVICE_ID_ATTRIBUTE_NAMES&quot;)" metaType="Expression" name="DEVICE_ID_ATTRIBUTE_NAMES" optional="true" type="&lt;rstring>"/>

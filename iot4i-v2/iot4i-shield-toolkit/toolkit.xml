@@ -55,6 +55,10 @@
         <inputPort name="HazardStream" portIndex="0" type="stream&lt;Hazard>"/>
         <outputPort name="PreparedHazardStream" portIndex="0" type="stream&lt;rstring data>"/>
       </compositeOp>
+      <function modelUriIndex="16" name="isHttps" native="true" public="true" returnType="boolean" uriIndex="0">
+        <prototype>&lt;string T&gt; public boolean isHttps(T apiURL)</prototype>
+        <parameter name="apiURL" type="T"/>
+      </function>
       <function modelUriIndex="16" name="getJsonStringHazard" native="true" public="true" returnType="T" uriIndex="0">
         <prototype>&lt;string T&gt; public T getJsonStringHazard(T shieldId, T userId, list&lt;T&gt; rawEvents, T actionParams)</prototype>
         <parameter name="shieldId" type="T"/>

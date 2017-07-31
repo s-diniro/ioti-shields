@@ -26,6 +26,8 @@ public composite ActionSink(input stream<rstring data> PreparedHazardStream )
 				extraHeaders : "Authorization: Bearer " + $API_TOKEN ;
 				headerContentType : "application/json" ;
 				maxRetries : $RETRY_COUNT ;
+				acceptAllCertificates : isHttps($API_URL) ; // FIXME: might allow potentially insecure connections
+
 		}
 
 }

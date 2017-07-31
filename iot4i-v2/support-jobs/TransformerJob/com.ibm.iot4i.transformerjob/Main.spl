@@ -16,7 +16,7 @@ composite Main
 			getSubmissionTimeValue("NOTIFICATION_TOPIC") ;
 		expression<rstring> $SINK_TOPIC : getSubmissionTimeValue("SINK_TOPIC") ;
 		// API params
-		expression<rstring> $API_URL : getSubmissionTimeValue("API_URL") ; // "http://10.0.2.2:10010/" 
+		expression<rstring> $API_URL : getSubmissionTimeValue("API_URL") + "/" ; // "http://10.0.2.2:10010" 
 		expression<rstring> $API_TOKEN : getSubmissionTimeValue("API_TOKEN") ;
 		// Other params
 		expression<rstring> $TENANT_ID : getSubmissionTimeValue("TENANT_ID") ;

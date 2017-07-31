@@ -16,3 +16,9 @@ SPL_JNIFunctions_com_ibm_iot4i_common.h
 SPL_JNIFunctions_com_ibm_iot4i_events_IoTP.h
 iot4i-v2/iot4i-shield-toolkit/com.ibm.iot4i.events.MH/native.function
 iot4i-v2/iot4i-shield-toolkit/com.ibm.iot4i.hazards.common/native.function
+SPL_JNIFunctions_com_ibm_iot4i_examples.h
+iot4i-v2/examples/simple-shields/CrashShield/output
+iot4i-v2/iot4i-shield-toolkit/impl/java/bin
+iot4i-v2/iot4i-shield-toolkit/com.ibm.iot4i.events.common/CheckActivationOp
+iot4i-v2/iot4i-shield-toolkit/com.ibm.iot4i.events.common/TransformerOp
+toolkit.xml.30522

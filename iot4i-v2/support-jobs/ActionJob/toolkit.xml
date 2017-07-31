@@ -12,7 +12,7 @@
         <parameter defaultValue="getSubmissionTimeValue(&quot;USERNAME&quot;)" metaType="Expression" name="USERNAME" optional="true" type="&lt;rstring>"/>
         <parameter defaultValue="getSubmissionTimeValue(&quot;PASSWORD&quot;)" metaType="Expression" name="PASSWORD" optional="true" type="&lt;rstring>"/>
         <parameter defaultValue="getSubmissionTimeValue(&quot;SOURCE_TOPIC&quot;)" metaType="Expression" name="SOURCE_TOPIC" optional="true" type="&lt;rstring>"/>
-        <parameter defaultValue="getSubmissionTimeValue(&quot;API_URL&quot;)" metaType="Expression" name="API_URL" optional="true" type="&lt;rstring>"/>
+        <parameter defaultValue="getSubmissionTimeValue(&quot;API_URL&quot;) + &quot;/&quot;" metaType="Expression" name="API_URL" optional="true" type="&lt;rstring>"/>
         <parameter defaultValue="getSubmissionTimeValue(&quot;API_TOKEN&quot;)" metaType="Expression" name="API_TOKEN" optional="true" type="&lt;rstring>"/>
         <parameter defaultValue="getSubmissionTimeValue(&quot;TENANT_ID&quot;)" metaType="Expression" name="TENANT_ID" optional="true" type="&lt;rstring>"/>
       </compositeOp>
