@@ -1,6 +1,5 @@
 namespace com.ibm.iot4i.transformerjob ;
 
-use com.ibm.iot4i.events.common::* ;
 use com.ibm.iot4i.events.MH::* ;
 use com.ibm.iot4i.hazards.MH::* ;
 

@@ -22,3 +22,5 @@ iot4i-v2/iot4i-shield-toolkit/impl/java/bin
 iot4i-v2/iot4i-shield-toolkit/com.ibm.iot4i.events.common/CheckActivationOp
 iot4i-v2/iot4i-shield-toolkit/com.ibm.iot4i.events.common/TransformerOp
 toolkit.xml.30522
+iot4i-v2/support-jobs/ActionJob/com.ibm.iot4i.actionjob/native.function
+iot4i-v2/support-jobs/ActionJob/impl/java/bin

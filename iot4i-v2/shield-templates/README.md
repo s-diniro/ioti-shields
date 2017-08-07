@@ -2,7 +2,6 @@
 
 This shield template shows the structure of a shield. Any iot4i shield should follow this template. The template contains the following operators:
 
- Inline-style: 
  ![alt text](./images/shield-template.png "Shield Template Operators")
  
  
@@ -41,11 +40,4 @@ Type Hazard = rstring userId, list<rstring> rawEvents, rstring actionParams ;
  
  
  
- The complete SPl code of the template is [here](./com.ibm.iot4i.shields.templates/ShieldTemplateWithMH.spl)
- 
- 
- ### Old Template using IBM IoT platform operators
- 
- Another **deprecated** template which connects directly with IBM IoT platform exists [here](./com.ibm.iot4i.shields.templates/ShieldTemplateWithIoTP.spl).
- 
- 
+ The complete SPl code of the template is [here](./com.ibm.iot4i.shields.templates/ShieldTemplate.spl)

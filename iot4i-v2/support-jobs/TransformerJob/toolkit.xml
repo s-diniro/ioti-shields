@@ -4,11 +4,52 @@
   <toolkit name="TransformerJob" requiredProductVersion="4.2.1.1" version="1.0.0">
     <description/>
     <uriTable>
-      <uri index="1" value="com.ibm.iot4i.transformerjob/Main.spl"/>
-      <uri index="2" value="com.ibm.iot4i.transformerjob/native.function/javaFunction.xml"/>
+      <uri index="1" value="com.ibm.iot4i.transformerjob/Transformer.spl"/>
+      <uri index="2" value="com.ibm.iot4i.transformerjob/Main.spl"/>
+      <uri index="4" value="com.ibm.iot4i.transformerjob/TransformerOp"/>
+      <uri index="3" value="com.ibm.iot4i.transformerjob/native.function/javaFunction.xml"/>
     </uriTable>
     <namespace name="com.ibm.iot4i.transformerjob">
-      <compositeOp column="11" line="7" name="Main" potentialMain="true" uriIndex="1">
+      <primitiveOp language="Java" modelUriIndex="4" name="TransformerOp" public="true">
+        <description>Java Operator Transformer</description>
+        <parameter expressionMode="Constant" name="vmArg" optional="true" type="rstring">
+          <description>
+Specifies command-line arguments that are passed to the Java virtual machine that the operator runs within.
+</description>
+        </parameter>
+        <parameter cardinality="1" expressionMode="AttributeFree" name="apiToken" optional="false" type="rstring">
+          <description/>
+        </parameter>
+        <parameter cardinality="1" expressionMode="AttributeFree" name="apiURL" optional="false" type="rstring">
+          <description/>
+        </parameter>
+        <parameter cardinality="1" expressionMode="AttributeFree" name="deviceIdAttributeNames" optional="false" type="rstring">
+          <description/>
+        </parameter>
+        <parameter cardinality="1" expressionMode="AttributeFree" name="tenantId" optional="false" type="rstring">
+          <description/>
+        </parameter>
+        <inputPort maxNumPorts="1" minNumPorts="1" optional="false" windowPunctInputMode="Oblivious">
+          <description>Port that ingests tuples</description>
+          <windowPolicy>NonWindowed</windowPolicy>
+        </inputPort>
+        <outputPort expressionMode="Nonexistent" maxNumPorts="1" minNumPorts="1" optional="false" windowPunctOutputMode="Generating">
+          <description>Port that produces tuples</description>
+        </outputPort>
+      </primitiveOp>
+      <compositeOp column="18" line="5" name="Transformer" potentialMain="false" public="true" uriIndex="1">
+        <parameter metaType="Expression" name="KAFKA_BROKERS_SASL" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="USERNAME" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="PASSWORD" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="API_URL" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="API_TOKEN" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="TENANT_ID" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="TOPIC" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="DEVICE_ID_ATTRIBUTE_NAMES" optional="false" type="&lt;rstring>"/>
+        <inputPort name="SourceStream" portIndex="0" type="stream&lt;rstring key, rstring message>"/>
+        <outputPort name="TransformedStream" portIndex="0" type="stream&lt;rstring userId, rstring key, rstring message>"/>
+      </compositeOp>
+      <compositeOp column="11" line="6" name="Main" potentialMain="true" uriIndex="2">
         <parameter defaultValue="getSubmissionTimeValue(&quot;KAFKA_BROKERS_SASL&quot;)" metaType="Expression" name="KAFKA_BROKERS_SASL" optional="true" type="&lt;rstring>"/>
         <parameter defaultValue="getSubmissionTimeValue(&quot;USERNAME&quot;)" metaType="Expression" name="USERNAME" optional="true" type="&lt;rstring>"/>
         <parameter defaultValue="getSubmissionTimeValue(&quot;PASSWORD&quot;)" metaType="Expression" name="PASSWORD" optional="true" type="&lt;rstring>"/>
@@ -20,7 +61,7 @@
         <parameter defaultValue="getSubmissionTimeValue(&quot;TENANT_ID&quot;)" metaType="Expression" name="TENANT_ID" optional="true" type="&lt;rstring>"/>
         <parameter defaultValue="getSubmissionTimeValue(&quot;DEVICE_ID_ATTRIBUTE_NAMES&quot;)" metaType="Expression" name="DEVICE_ID_ATTRIBUTE_NAMES" optional="true" type="&lt;rstring>"/>
       </compositeOp>
-      <function modelUriIndex="2" name="prepareAnnotatedEvent" native="true" public="true" returnType="T" uriIndex="0">
+      <function modelUriIndex="3" name="prepareAnnotatedEvent" native="true" public="true" returnType="T" uriIndex="0">
         <prototype>&lt;string T&gt; public T prepareAnnotatedEvent(T userId, T key, T message)</prototype>
         <parameter name="userId" type="T"/>
         <parameter name="key" type="T"/>

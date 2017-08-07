@@ -35,13 +35,4 @@ public composite SubmitHazards(input stream<Hazard> HazardStream )
 				QOS : $QOS ;
 				SINK_TOPIC : $SINK_TOPIC ;
 		}
-
-		() as actionSink = ActionSink(PreparedHazardStream)
-		{
-			param
-				API_URL : $API_URL ;
-				API_TOKEN : $API_TOKEN ;
-				TENANT_ID : $TENANT_ID ;
-		}
-
 } 
