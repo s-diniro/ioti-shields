@@ -1,4 +1,4 @@
-## Enocean Shields
+## Wally Shields
 
 This repo contains examples of shields using [Wally](https://www.wallyhome.com) sensors.
 
