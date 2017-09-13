@@ -1,4 +1,4 @@
-namespace com.ibm.iot4i.wally.examples;
+namespace com.ibm.iot4i.wally.examples ;
 
 use com.ibm.iot4i.hazards.MH::* ;
 use com.ibm.iot4i.events.MH::* ;
@@ -44,7 +44,6 @@ composite HumidityShield
 				filter : entryCondition(message) ;
 		}
 
-
 		//  Shield Specific Operators goes here
 		@view(name = "Hazards", port = HazardStream, sampleSize = 5, bufferSize = 50)
 		@parallel(width = 1)
@@ -53,7 +52,8 @@ composite HumidityShield
 			param
 				filter : checkHumidity(message) ;
 			output
-				HazardStream : userId = userId, rawEvents = [ message ], actionParams =
+				HazardStream : userId = userId, rawEvents = "[" + message + "]",
+					actionParams =
 					"{\"hazardTitle\":\"A potential water leak was detected by the humidity sensor.\",\"emailSubject\":\"Alert from IoT for Insurance\",\"emailText\":\"Hello IoT for Insurance user. You have a hazard!!!\" }" ;
 		}
 
@@ -68,4 +68,5 @@ composite HumidityShield
 				TOPIC : $SINK_TOPIC ;
 				SHIELD_ID : $SHIELD_ID ;
 		}
+
 }

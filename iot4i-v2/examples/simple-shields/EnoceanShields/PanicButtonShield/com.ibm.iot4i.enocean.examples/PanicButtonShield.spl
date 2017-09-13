@@ -1,4 +1,4 @@
-namespace com.ibm.iot4i.enocean.examples;
+namespace com.ibm.iot4i.enocean.examples ;
 
 use com.ibm.iot4i.hazards.MH::* ;
 use com.ibm.iot4i.events.MH::* ;
@@ -52,7 +52,8 @@ composite PanicButtonShield
 			param
 				filter : checkPanicButton(message) ;
 			output
-				HazardStream : userId = userId, rawEvents = [ message ], actionParams =
+				HazardStream : userId = userId, rawEvents = "[" + message + "]",
+					actionParams =
 					"{\"hazardTitle\":\"Panic Button Pressed\",\"emailSubject\":\"Alert from IoT for Insurance\",\"emailText\":\"Hello IoT for Insurance user. You have a hazard!!!\" }" ;
 		}
 

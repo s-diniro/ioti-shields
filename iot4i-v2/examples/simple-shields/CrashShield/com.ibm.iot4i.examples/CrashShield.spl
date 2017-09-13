@@ -75,7 +75,8 @@ composite CrashShield
 			param
 				filter : checkCrash(message) ;
 			output
-				HazardStream : userId = userId, rawEvents = [ message ], actionParams =
+				HazardStream : userId = userId, rawEvents = "[" + message + "]",
+					actionParams =
 					"{\"hazardTitle\":\"Crash Detected\",\"emailSubject\":\"Alert from IoT for Insurance\",\"emailText\":\"Hello IoT for Insurance user. You have a hazard!!!\" }" ;
 		}
 

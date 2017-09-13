@@ -1,4 +1,4 @@
-namespace com.ibm.iot4i.models;
+namespace com.ibm.iot4i.models ;
 
 // Hazard is what comes out of shield-specific stage
-type Hazard = rstring userId, list<rstring> rawEvents, rstring actionParams ;
+type Hazard = rstring userId, rstring rawEvents, rstring actionParams ;

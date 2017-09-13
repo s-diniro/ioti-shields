@@ -74,8 +74,8 @@ composite ShieldTemplate
 		(stream<Hazard> HazardStream) as shield = Functor(ValidatedStream)
 		{
 			output
-				HazardStream : userId = userId, rawEvents = [ message ], actionParams =
-					"{\"hazardTitle\":\"hazard detected\"}" ;
+				HazardStream : userId = userId, rawEvents = "[" + message + "]",
+					actionParams = "{\"hazardTitle\":\"hazard detected\"}" ;
 		}
 
 		//  Submitting Hazards
