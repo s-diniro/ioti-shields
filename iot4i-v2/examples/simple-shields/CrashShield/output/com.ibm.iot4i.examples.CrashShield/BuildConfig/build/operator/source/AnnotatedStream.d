@@ -295,7 +295,7 @@ build/operator/source/AnnotatedStream.o: \
  /opt/ibm/InfoSphere_Streams/4.2.1.1//system/impl/include/UTILS/CV.h \
  src/operator/source/./../../type/BeJwrMS42Ky1OLfJMKTbOTq0sNs9NLS5OTE8FAHEVAk7.h \
  src/operator/source/./../../type/BeJwrMSo2zk6tLDbPTS0uTkxPBQAysQYl.h \
- /home/streamsadmin/workspace/iot4i-shield-toolkit/com.ibm.iot4i.events.MH/native.function/./SPL_JNIFunctions_com_ibm_iot4i_events_MH.h \
+ /media/sf_shared/ioti-shields/iot4i-v2/iot4i-shield-toolkit/com.ibm.iot4i.events.MH/native.function/./SPL_JNIFunctions_com_ibm_iot4i_events_MH.h \
  /opt/ibm/InfoSphere_Streams/4.2.1.1//system/impl/include/SPL/Runtime/Function/SPLJavaFunction.h \
  /opt/ibm/InfoSphere_Streams/4.2.1.1/java/include/jni.h \
  /opt/ibm/InfoSphere_Streams/4.2.1.1/java/include/jniport.h \

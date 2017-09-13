@@ -1,4 +1,4 @@
-// eJzNVV1vmzAUlf9JFO0BtgjzkWStVVXqmkVKl6aV0j4jA15wARvZTin79XMMjZLMD_0nDtAnExYeLz7nX19cprzyaVJ5UguBKvnkF_1llghH7szKPg2TYlAgTA11cIhp4Hu1u1NYHfyF0j7tfjcJkWr_033ZruSkwexbsJfvq_0WxeT_0qXm_0wevFYqa8fAiu1o_1L_0G61mG9ZqihnMk55FWv2mHI1prtRxZmXX2uuIAIlVZ98oP9BSGh5lG2AwQILFlqwyIKNLdjEgk0t2FcLdmHBLm2arYHYIglOQwEw5xWB_1QLhrKIMNlwUssYpgbcCy3ydU1JmMMMKA8YZ8UEE0hJLucIVAScsx0qcYWqtAI_1XRGDFhfSOSuGhh4cuuFF6hmSryFwQ0vEtaSKwaEF0SumY8X7hEXpWVEfbIrQh6onzsqBqRgVJ9dStc47AoesOvgyOPSGt6hK_04FcME8q0x4nGfyOK1wpmvGElxxnJ4Of_1RZdJVkkTm6Ja7NZfUSLntPyjhAKAkAEONzNCmhshTa4fu_11sAL2hjW987KoDeS_0rA55duX4seNMj3NHA7JzOhJ2JRgPzdawD79XKuoxTLNXVYTCjLi1bytR0PLjWorWH0_19hk_1HCk8XMcV3N6jiGYvrXKPTEpkO55zFogig8h0Cn8jbHjJGyC8S0t85cdOayz6nf2z65QXhaKbujgdZc7Hv1Bw4FQIEwJwvQHUPxmqbgvcQK0u7fKyIl3pD92P8Ns2gyBw
+// eJzNVdtunDAQlf8ErfoALYEFNmliRZHSppE23VykTZ6RMZPgcDGyTTbbqv9eY8gqu_1VD8lC1AjH4MPY5Mx7GlNcBy_0pAKgGkls9BSe5LgvH33twInncUBIrQVF8xmgRBONxq3UL4BS5W4nI5ixe0fFp_1W3VXcv9aLFfxj_0lULcr9y9vV3SlZzudnKigm6Hh5s0gvrubnXUMV441MKa9TzZ4yrmasH9W8CYoTzRUlqGLqwxTpORgLLY81D8hgkQWLLVhiwWYWbN_0CHViwzxbs0IId2TRbA7FFEu2GgsIackZCeZ_1KggjIQ50tticLBlUuQ5O6vac4hGdStxXIULLebhy_0CiKLpRmEOVEENbyBCFGiaIFUp12Poenqn2MF_0FLlPqkqv3f75cAzhbbfLD_1jvALSOGbKrSAUNpBUhJYGOkEJmujZE4SU6ODlmSBaESmvSA1oJ_0jtxLgTai3IgLcgiOJCBluVeT3CEw_0dKr1C1ik4FwAD34Jlgog1SnYpXTPe1CHGd4rp5K8xfgB1q6MqmTpjAqheeu2_0ReDE85xPzrZn2G9E_0EieSJixRnvsaPw3onirwpyvmoqTXBfTx_19Fl0lWxTKbolb0_068YyHNW_1VFCEcLYAK97C8aaG2NNrh_19P2IA3V_0Mb7rtqgN5KatXPH25vi9407I83zE_18mDiwSS_0Y77OdOCjWtlWKSVSHb8Oxh_1S0rFGHcycEy1ae7jjDJuMR57Nz1zP06yuaygO_1hqFXtg0TO9tDJogid9CoFP5tSBNA9UQiOm2gzkczNGY0_0lox_0RG8W6l9CcVa7nYHB3vOKMQQ8IcdH3DUrxlFL2UWAnrzXsNUpIH2IynvwGnvmVk
 
 
 #include "./KafkaSinkOp.h"
@@ -160,6 +160,8 @@ MY_BASE_OPERATOR::MY_BASE_OPERATOR()
     param$propertiesFile$0 = ::SPL::JNIFunctions::com::ibm::iot4i::common::SPL_JNIFunctions::getKafkaPropertiesFileName(SPL::Functions::Utility::getToolkitDirectory(lit$0), lit$1, lit$2, lit$3, (lit$4 + ::SPL::spl_cast<SPL::rstring, SPL::uint64 >::cast(::SPL::Functions::Utility::jobID())), (((lit$6 + ::SPL::spl_cast<SPL::rstring, SPL::uint64 >::cast(::SPL::Functions::Utility::jobID())) + lit$5) + ::SPL::spl_cast<SPL::rstring, SPL::int32 >::cast(::SPL::Functions::Utility::getChannel())), lit$7, lit$8, lit$9, lit$10, lit$11, lit$12);
     addParameterValue ("propertiesFile", SPL::ConstValueHandle(param$propertiesFile$0));
     (void) getParameters(); // ensure thread safety by initializing here
+    OperatorMetrics& om = getContext().getMetrics();
+    metrics_[0] = &(om.createCustomMetric("nExceptionsCaughtPort0", "Number of exceptions caught on port 0", Metric::Counter));
 }
 MY_BASE_OPERATOR::~MY_BASE_OPERATOR()
 {
@@ -176,8 +178,44 @@ void MY_BASE_OPERATOR::tupleLogic(Tuple const & tuple, uint32_t port) {
 
 
 void MY_BASE_OPERATOR::processRaw(Tuple const & tuple, uint32_t port) {
-    tupleLogic (tuple, port);
-    static_cast<MY_OPERATOR_SCOPE::MY_OPERATOR*>(this)->MY_OPERATOR::process(tuple, port);
+    try {
+            tupleLogic (tuple, port);
+            static_cast<MY_OPERATOR_SCOPE::MY_OPERATOR*>(this)->MY_OPERATOR::process(tuple, port);
+    } catch (SPL::SPLRuntimeException const & e) {
+        if (getContext().getPE().mustRethrowException()) {
+            throw e;
+        }
+        SPLAPPTRC(L_ERROR, "Exception in operator " << getContext().getName()
+            << " in port " << port, SPL_OPER_DBG);
+        SPLAPPTRC(L_ERROR, "Processed tuple: " << tuple, SPL_OPER_DBG);
+        SPLAPPTRC(L_ERROR, "Exception: " << e, SPL_OPER_DBG);
+        metrics_[port]->incrementValue();
+    }
+    catch (std::exception const & e) {
+        if (getContext().getPE().mustRethrowException()) {
+            throw e;
+        }
+        SPLAPPTRC(L_ERROR, "Exception in operator " << getContext().getName()
+            << " in port " << port, SPL_OPER_DBG);
+        SPLAPPTRC(L_ERROR, "Processed tuple: " << tuple, SPL_OPER_DBG);
+        SPLAPPTRC(L_ERROR, "Exception identifier: " << e.what(), SPL_OPER_DBG);
+        std::stringstream backtrace;
+        SPL::BacktraceDumper::dump(backtrace);
+        SPLAPPTRC(L_ERROR, "Exception: " << backtrace.str(), SPL_OPER_DBG);
+        metrics_[port]->incrementValue();
+    }
+    catch (...) {
+        if (getContext().getPE().mustRethrowException()) {
+            throw;
+        }
+        SPLAPPTRC(L_ERROR, "Exception in operator " << getContext().getName()
+            << " in port " << port, SPL_OPER_DBG);
+        SPLAPPTRC(L_ERROR, "Processed tuple: " << tuple, SPL_OPER_DBG);
+        std::stringstream backtrace;
+        SPL::BacktraceDumper::dump(backtrace);
+        SPLAPPTRC(L_ERROR, "Exception: " << backtrace.str(), SPL_OPER_DBG);
+        metrics_[port]->incrementValue();
+    }
 }
 
 

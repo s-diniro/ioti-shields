@@ -689,7 +689,7 @@ build/operator/source/source/SourceStream.o: \
  /opt/ibm/InfoSphere_Streams/4.2.1.1//include/SPL/Runtime/Utility/CV.h \
  /opt/ibm/InfoSphere_Streams/4.2.1.1//system/impl/include/UTILS/CV.h \
  src/operator/source/source/./../../../type/BeJwrMSo2zk6tLDbPTS0uTkxPBQAysQYl.h \
- /home/streamsadmin/workspace/iot4i-shield-toolkit/com.ibm.iot4i.common/native.function/./SPL_JNIFunctions_com_ibm_iot4i_common.h \
+ /media/sf_shared/ioti-shields/iot4i-v2/iot4i-shield-toolkit/com.ibm.iot4i.common/native.function/./SPL_JNIFunctions_com_ibm_iot4i_common.h \
  /opt/ibm/InfoSphere_Streams/4.2.1.1//system/impl/include/SPL/Runtime/Function/SPLJavaFunction.h \
  /opt/ibm/InfoSphere_Streams/4.2.1.1//include/SPL/Runtime/Function/SPLFunctions.h \
  /opt/ibm/InfoSphere_Streams/4.2.1.1//system/impl/include/SPL/Runtime/Function/SPLCast.h \
