@@ -27,22 +27,71 @@ Specifies command-line arguments that are passed to the Java virtual machine tha
           <description>Port that produces tuples</description>
         </outputPort>
       </primitiveOp>
-      <compositeOp column="11" line="7" name="SevereWeatherShield" potentialMain="true" uriIndex="1">
+      <compositeOp column="11" line="11" name="SevereWeatherShield" potentialMain="true" uriIndex="1">
         <parameter defaultValue="getSubmissionTimeValue(&quot;KAFKA_BROKERS_SASL&quot;)" metaType="Expression" name="KAFKA_BROKERS_SASL" optional="true" type="&lt;rstring>"/>
         <parameter defaultValue="getSubmissionTimeValue(&quot;USERNAME&quot;)" metaType="Expression" name="USERNAME" optional="true" type="&lt;rstring>"/>
         <parameter defaultValue="getSubmissionTimeValue(&quot;PASSWORD&quot;)" metaType="Expression" name="PASSWORD" optional="true" type="&lt;rstring>"/>
         <parameter defaultValue="getSubmissionTimeValue(&quot;SOURCE_TOPIC&quot;)" metaType="Expression" name="SOURCE_TOPIC" optional="true" type="&lt;rstring>"/>
-        <parameter defaultValue="getSubmissionTimeValue(&quot;NOTIFICATION_TOPIC&quot;)" metaType="Expression" name="NOTIFICATION_TOPIC" optional="true" type="&lt;rstring>"/>
         <parameter defaultValue="getSubmissionTimeValue(&quot;SINK_TOPIC&quot;)" metaType="Expression" name="SINK_TOPIC" optional="true" type="&lt;rstring>"/>
-        <parameter defaultValue="getSubmissionTimeValue(&quot;API_URL&quot;) + &quot;/&quot;" metaType="Expression" name="API_URL" optional="true" type="&lt;rstring>"/>
-        <parameter defaultValue="getSubmissionTimeValue(&quot;API_TOKEN&quot;)" metaType="Expression" name="API_TOKEN" optional="true" type="&lt;rstring>"/>
+        <parameter defaultValue="getSubmissionTimeValue(&quot;WEATHER_TOPIC&quot;)" metaType="Expression" name="WEATHER_TOPIC" optional="true" type="&lt;rstring>"/>
         <parameter defaultValue="getSubmissionTimeValue(&quot;SHIELD_ID&quot;)" metaType="Expression" name="SHIELD_ID" optional="true" type="&lt;rstring>"/>
-        <parameter defaultValue="getSubmissionTimeValue(&quot;TENANT_ID&quot;)" metaType="Expression" name="TENANT_ID" optional="true" type="&lt;rstring>"/>
       </compositeOp>
+      <compositeOp column="11" line="78" name="SensorEventsOp" potentialMain="false" uriIndex="1">
+        <parameter metaType="Expression" name="KAFKA_BROKERS_SASL" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="USERNAME" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="PASSWORD" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="SOURCE_TOPIC" optional="false" type="&lt;rstring>"/>
+        <outputPort name="SensorEventData" portIndex="0" type="stream&lt;SensorEventDataSchema>"/>
+      </compositeOp>
+      <compositeOp column="11" line="127" name="WeatherDataOp" potentialMain="false" uriIndex="1">
+        <parameter metaType="Expression" name="KAFKA_BROKERS_SASL" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="USERNAME" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="PASSWORD" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="WEATHER_TOPIC" optional="false" type="&lt;rstring>"/>
+        <outputPort name="WeatherData" portIndex="0" type="stream&lt;WeatherDataSchema>"/>
+      </compositeOp>
+      <function modelUriIndex="2" name="weatherEntryCondition" native="true" public="true" returnType="boolean" uriIndex="0">
+        <prototype>&lt;string T&gt; public boolean weatherEntryCondition(T message)</prototype>
+        <parameter name="message" type="T"/>
+      </function>
+      <function modelUriIndex="2" name="eventEntryCondition" native="true" public="true" returnType="boolean" uriIndex="0">
+        <prototype>&lt;string T&gt; public boolean eventEntryCondition(T message)</prototype>
+        <parameter name="message" type="T"/>
+      </function>
+      <function modelUriIndex="2" name="getJsonStringHazard" native="true" public="true" returnType="T" uriIndex="0">
+        <prototype>&lt;string T&gt; public T getJsonStringHazard(T shieldId, T userId, list&lt;T&gt; rawEvents, T actionParams)</prototype>
+        <parameter name="shieldId" type="T"/>
+        <parameter name="userId" type="T"/>
+        <parameter name="rawEvents" type="list&lt;T>"/>
+        <parameter name="actionParams" type="T"/>
+      </function>
+      <function modelUriIndex="2" name="getJsonStringHazard" native="true" public="true" returnType="T" uriIndex="0">
+        <prototype>&lt;string T&gt; [N] public T getJsonStringHazard(T shieldId, T userId, list&lt;T&gt;[N] rawEvents, T actionParams)</prototype>
+        <parameter name="shieldId" type="T"/>
+        <parameter name="userId" type="T"/>
+        <parameter name="rawEvents" type="list&lt;T>[N]"/>
+        <parameter name="actionParams" type="T"/>
+      </function>
+      <function modelUriIndex="2" name="getTemperature" native="true" public="true" returnType="int32" uriIndex="0">
+        <prototype>&lt;string T&gt; public int32 getTemperature(T message)</prototype>
+        <parameter name="message" type="T"/>
+      </function>
+      <function modelUriIndex="2" name="getCountryCode" native="true" public="true" returnType="T" uriIndex="0">
+        <prototype>&lt;string T&gt; public T getCountryCode(T message, boolean isWeatherData)</prototype>
+        <parameter name="message" type="T"/>
+        <parameter name="isWeatherData" type="boolean"/>
+      </function>
+      <function modelUriIndex="2" name="getZipCode" native="true" public="true" returnType="T" uriIndex="0">
+        <prototype>&lt;string T&gt; public T getZipCode(T message, boolean isWeatherData)</prototype>
+        <parameter name="message" type="T"/>
+        <parameter name="isWeatherData" type="boolean"/>
+      </function>
       <function modelUriIndex="2" name="entryCondition" native="true" public="true" returnType="boolean" uriIndex="0">
         <prototype>&lt;string T&gt; public boolean entryCondition(T message)</prototype>
         <parameter name="message" type="T"/>
       </function>
+      <type column="6" line="6" name="SensorEventDataSchema" static="true" type="rstring userId, rstring key, rstring message, rstring zipCode, rstring countryCode" uriIndex="1"/>
+      <type column="6" line="8" name="WeatherDataSchema" static="true" type="rstring message, rstring zipCode, rstring countryCode, int32 temperature" uriIndex="1"/>
     </namespace>
     <dependency>
       <common:name>iot4i-shield-toolkit</common:name>
