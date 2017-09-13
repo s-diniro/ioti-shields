@@ -8,6 +8,7 @@ public composite PrepareHazards(input stream<Hazard> HazardStream ; output
 	param
 		expression<rstring> $SHIELD_ID ;
 	graph
+		@catch(exception = all, tupleTrace = true, stackTrace = true)
 		(stream<rstring data> PreparedHazardStream) as stringify =
 			Functor(HazardStream)
 		{
@@ -24,8 +25,9 @@ public composite PrepareHazards(input stream<Hazard> HazardStream ; output
 			param
 				filter : userId != "" ;
 			output
-				PreparedHazardStream : data = getJsonStringHazard($SHIELD_ID, userId,
-					rawEvents, actionParams) ;
+				PreparedHazardStream : data = "{\"userId\": \"" + userId +
+					"\",\"shieldId\": \"" + $SHIELD_ID + "\",\"rawEvents\": " + rawEvents +
+					",\"actionParams\": " + actionParams + "}" ;
 		}
 
 }
