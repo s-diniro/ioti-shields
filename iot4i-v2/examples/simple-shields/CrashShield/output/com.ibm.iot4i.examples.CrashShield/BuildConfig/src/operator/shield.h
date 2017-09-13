@@ -1,4 +1,4 @@
-// eJyVUmtL60AQZf_0JiB_1aL3n4wOsiQpTItaYPSBH8FLbJmKx5bO7O1hh_1_1Z2sbRWlgoSEzObMnJNzBtvK0VAJI1UjKs5v101qlGY_08_0g6YYeO45q_0BfcaJp2exqfH970_1j54m0_1vlar785_0EML2ZRfDZfhn9ug7_1hQ1CeO8XhD419XB9HocKs96O3GNvo_0dGLy27dp2_0LGy_1HGDtznQfTIDibDpMu40WUTGZ3VhrJxCRVdSJXdCtzKhN4FXVbATrFFUn2WSXNkceoiXONRssmZ4y5harBpRJEjSKrZeN2SpfYihTcGy2wiAsJVeZmwgjWqAaGUU_0yMjCYYaetlKpANETCuT34LIpzUsU5yaLHoIvzrTCLTr6AC0hLyzuSrdKk2MnBJDUgihxG4zELX1tNFcFtGBvUu5LfhMEk0zZMRnGuEfRdxra_0lNDv3jfUu3ogVT_0S_1iZIVpOKb_1z_01trtwe4_1rRvv6NGYadGFL9AYpHDRXG7QVx_199vjzpINhF_1Z9Go0dkWX7jBc2o4XQtCn7lW72jFz6DxVyAzJ
+// eJyVUu9P4kAQzf4nxvihxNhtQaNuLiZI0JOWwl25S_1zULHSgK2237iwI_1PVuVyEGldyl6Y_0Zvtn35s1glbsKcq6FLHnO2N2inGipiE88c7XIsetSva6A3kLvRfXj82aw9gfhtNcPRuPB6NnDCK_0jML4YjLpXd_02f3b_1t_0aWbHR8qHD9iLFat8M8yCtbzRfT0Oxh1Lnub_1lUYd1bBpuPdt4ebX_03WrD7oRzwMk170YJUZlZhMZJGIsbmlPhcJrHhR5YBudmMV50KfeMQUMaZQK1HOiM35X_0SaezlCC0gFpzhNMOMKUmo4xBlmAvIUqSU8WzbplpOiqN87QEdxzGIb0JRrTkpZgmfMnIpcQ_02q5RtLmQMvjVzGbOJje4yZ_1hgzDZpHTcjYls6ikz1wBpO55XVEJZXp3Z2BTgpA5DNwGg3SXVXKRAZup_1qOelPyP1Mlgii7FcS4vEBQDynZOjeH9e77nXoX16TyMOm_1bwQpjIhP9D7Zm_06uTWvGG9ppEMVfuksoNX5f6RPHsetydHr0taHmh92xBuF2CEOueHHwRLtqxoZXQ3QXBD
 
 
 
@@ -17,7 +17,7 @@
 using namespace UTILS_NAMESPACE;
 
 #include "../type/BeJwrMS42Ky1OLfJMKTbOTq0sNs9NLS5OTE8FAHEVAk7.h"
-#include "../type/BeJwrMS42Ky1OLfJMySm2LEosdy1LzSspLjY0SkwuyczPC0gsSswtBgAMAA5M.h"
+#include "../type/BeJwrMS42Ky1OLfJMKbYsSix3LUvNKykuNjRKTC7JzM8LSCxKzC0GAPzQA3g.h"
 #include <SPL_JNIFunctions_com_ibm_iot4i_examples.h>
 
 #include <bitset>
@@ -34,7 +34,7 @@ class MY_BASE_OPERATOR : public Operator
 public:
     
     typedef SPL::BeJwrMS42Ky1OLfJMKTbOTq0sNs9NLS5OTE8FAHEVAk7 IPort0Type;
-    typedef SPL::BeJwrMS42Ky1OLfJMySm2LEosdy1LzSspLjY0SkwuyczPC0gsSswtBgAMAA5M OPort0Type;
+    typedef SPL::BeJwrMS42Ky1OLfJMKbYsSix3LUvNKykuNjRKTC7JzM8LSCxKzC0GAPzQA3g OPort0Type;
     
     MY_BASE_OPERATOR();
     
@@ -60,6 +60,8 @@ public:
     
     
     SPL::rstring lit$0;
+    SPL::rstring lit$1;
+    SPL::rstring lit$2;
     
     
 protected:

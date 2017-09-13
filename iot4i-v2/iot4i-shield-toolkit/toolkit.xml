@@ -4,18 +4,18 @@
   <toolkit name="iot4i-shield-toolkit" requiredProductVersion="4.2.1.1" version="1.0.0">
     <description/>
     <uriTable>
-      <uri index="5" value="com.ibm.iot4i.hazards.IoTP/Sink.spl"/>
+      <uri index="7" value="com.ibm.iot4i.hazards.IoTP/Sink.spl"/>
       <uri index="14" value="com.ibm.iot4i.events.IoTP/native.function/javaFunction.xml"/>
-      <uri index="1" value="com.ibm.iot4i.events.MH/AnnotatedSource.spl"/>
-      <uri index="9" value="com.ibm.iot4i.events.IoTP/CheckActivation.spl"/>
-      <uri index="3" value="com.ibm.iot4i.events.MH/CheckActivation.spl"/>
-      <uri index="2" value="com.ibm.iot4i.events.MH/Source.spl"/>
-      <uri index="10" value="com.ibm.iot4i.hazards.common/PrepareHazards.spl"/>
-      <uri index="7" value="com.ibm.iot4i.hazards.MH/Sink.spl"/>
-      <uri index="4" value="com.ibm.iot4i.hazards.IoTP/SubmitHazards.spl"/>
+      <uri index="3" value="com.ibm.iot4i.events.MH/AnnotatedSource.spl"/>
+      <uri index="1" value="com.ibm.iot4i.events.IoTP/CheckActivation.spl"/>
+      <uri index="4" value="com.ibm.iot4i.events.MH/CheckActivation.spl"/>
+      <uri index="5" value="com.ibm.iot4i.events.MH/Source.spl"/>
+      <uri index="6" value="com.ibm.iot4i.hazards.common/PrepareHazards.spl"/>
+      <uri index="9" value="com.ibm.iot4i.hazards.MH/Sink.spl"/>
+      <uri index="8" value="com.ibm.iot4i.hazards.IoTP/SubmitHazards.spl"/>
       <uri index="12" value="com.ibm.iot4i.common/native.function/javaFunction.xml"/>
-      <uri index="8" value="com.ibm.iot4i.events.IoTP/Source.spl"/>
-      <uri index="6" value="com.ibm.iot4i.hazards.MH/SubmitHazards.spl"/>
+      <uri index="2" value="com.ibm.iot4i.events.IoTP/Source.spl"/>
+      <uri index="10" value="com.ibm.iot4i.hazards.MH/SubmitHazards.spl"/>
       <uri index="15" value="com.ibm.iot4i.events.MH/native.function/javaFunction.xml"/>
       <uri index="13" value="com.ibm.iot4i.hazards.common/native.function/javaFunction.xml"/>
       <uri index="16" value="com.ibm.iot4i.events.common/CheckActivationOp"/>
@@ -39,7 +39,7 @@
       </function>
     </namespace>
     <namespace name="com.ibm.iot4i.hazards.common">
-      <compositeOp column="18" line="5" name="PrepareHazards" potentialMain="false" public="true" uriIndex="10">
+      <compositeOp column="18" line="5" name="PrepareHazards" potentialMain="false" public="true" uriIndex="6">
         <parameter metaType="Expression" name="SHIELD_ID" optional="false" type="&lt;rstring>"/>
         <inputPort name="HazardStream" portIndex="0" type="stream&lt;Hazard>"/>
         <outputPort name="PreparedHazardStream" portIndex="0" type="stream&lt;rstring data>"/>
@@ -48,23 +48,23 @@
         <prototype>&lt;string T&gt; public boolean isHttps(T apiURL)</prototype>
         <parameter name="apiURL" type="T"/>
       </function>
-      <function modelUriIndex="13" name="getJsonStringHazard" native="true" public="true" returnType="T" uriIndex="0">
-        <prototype>&lt;string T&gt; public T getJsonStringHazard(T shieldId, T userId, list&lt;T&gt; rawEvents, T actionParams)</prototype>
-        <parameter name="shieldId" type="T"/>
-        <parameter name="userId" type="T"/>
-        <parameter name="rawEvents" type="list&lt;T>"/>
-        <parameter name="actionParams" type="T"/>
-      </function>
-      <function modelUriIndex="13" name="getJsonStringHazard" native="true" public="true" returnType="T" uriIndex="0">
-        <prototype>&lt;string T&gt; [N] public T getJsonStringHazard(T shieldId, T userId, list&lt;T&gt;[N] rawEvents, T actionParams)</prototype>
-        <parameter name="shieldId" type="T"/>
-        <parameter name="userId" type="T"/>
-        <parameter name="rawEvents" type="list&lt;T>[N]"/>
-        <parameter name="actionParams" type="T"/>
-      </function>
     </namespace>
     <namespace name="com.ibm.iot4i.events.IoTP">
-      <compositeOp column="18" line="5" name="Source" potentialMain="false" public="true" uriIndex="8">
+      <compositeOp column="18" line="6" name="CheckActivation" potentialMain="false" public="true" uriIndex="1">
+        <parameter metaType="Expression" name="ORG" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="AUTH_KEY" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="AUTH_TOKEN" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="QOS" optional="false" type="&lt;int32>"/>
+        <parameter defaultValue="(rstring)jobID() + &quot;_notification_activation&quot;" metaType="Expression" name="NOTIFICATION_APP_ID" optional="true" type="&lt;rstring>"/>
+        <parameter defaultValue="&quot;iot-2/type/IoT4i_userActivationChange/id/+/evt/notification/fmt/json&quot;" metaType="Expression" name="NOTIFICATION_TOPIC" optional="true" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="API_URL" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="API_TOKEN" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="TENANT_ID" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="SHIELD_ID" optional="false" type="&lt;rstring>"/>
+        <inputPort name="SourceStream" portIndex="0" type="stream&lt;rstring userId, rstring key, rstring message>"/>
+        <outputPort name="ValidatedStream" portIndex="0" type="stream&lt;rstring userId, rstring key, rstring message>"/>
+      </compositeOp>
+      <compositeOp column="18" line="5" name="Source" potentialMain="false" public="true" uriIndex="2">
         <parameter metaType="Expression" name="ORG" optional="false" type="&lt;rstring>"/>
         <parameter metaType="Expression" name="AUTH_KEY" optional="false" type="&lt;rstring>"/>
         <parameter metaType="Expression" name="AUTH_TOKEN" optional="false" type="&lt;rstring>"/>
@@ -79,20 +79,6 @@
         <parameter defaultValue="getThisToolkitDir() + &quot;/opt/messaging.ts&quot;" metaType="Expression" name="TRUST_STORE" optional="true" type="&lt;rstring>"/>
         <outputPort name="SourceStream" portIndex="0" type="stream&lt;rstring key, rstring message>"/>
       </compositeOp>
-      <compositeOp column="18" line="6" name="CheckActivation" potentialMain="false" public="true" uriIndex="9">
-        <parameter metaType="Expression" name="ORG" optional="false" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="AUTH_KEY" optional="false" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="AUTH_TOKEN" optional="false" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="QOS" optional="false" type="&lt;int32>"/>
-        <parameter defaultValue="(rstring)jobID() + &quot;_notification_activation&quot;" metaType="Expression" name="NOTIFICATION_APP_ID" optional="true" type="&lt;rstring>"/>
-        <parameter defaultValue="&quot;iot-2/type/IoT4i_userActivationChange/id/+/evt/notification/fmt/json&quot;" metaType="Expression" name="NOTIFICATION_TOPIC" optional="true" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="API_URL" optional="false" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="API_TOKEN" optional="false" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="TENANT_ID" optional="false" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="SHIELD_ID" optional="false" type="&lt;rstring>"/>
-        <inputPort name="SourceStream" portIndex="0" type="stream&lt;rstring userId, rstring key, rstring message>"/>
-        <outputPort name="ValidatedStream" portIndex="0" type="stream&lt;rstring userId, rstring key, rstring message>"/>
-      </compositeOp>
       <function modelUriIndex="14" name="getJsonStringKey" native="true" public="true" returnType="T" uriIndex="0">
         <description>get a kafka key from topic</description>
         <prototype>&lt;string T&gt; public T getJsonStringKey(T orgId, T topic)</prototype>
@@ -101,19 +87,10 @@
       </function>
     </namespace>
     <namespace name="com.ibm.iot4i.models">
-      <type column="6" line="4" name="Hazard" static="true" type="rstring userId, list&lt;rstring> rawEvents, rstring actionParams" uriIndex="11"/>
+      <type column="6" line="4" name="Hazard" static="true" type="rstring userId, rstring rawEvents, rstring actionParams" uriIndex="11"/>
     </namespace>
     <namespace name="com.ibm.iot4i.hazards.MH">
-      <compositeOp column="18" line="6" name="SubmitHazards" potentialMain="false" public="true" uriIndex="6">
-        <parameter metaType="Expression" name="KAFKA_BROKERS_SASL" optional="false" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="USERNAME" optional="false" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="PASSWORD" optional="false" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="TOPIC" optional="false" type="&lt;rstring>"/>
-        <parameter defaultValue="&quot;{\&quot;timestamp:\&quot;&quot; + (rstring)getTimestampInSecs() + &quot;\&quot;}&quot;" metaType="Expression" name="KEY" optional="true" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="SHIELD_ID" optional="false" type="&lt;rstring>"/>
-        <inputPort name="HazardStream" portIndex="0" type="stream&lt;Hazard>"/>
-      </compositeOp>
-      <compositeOp column="18" line="8" name="Sink" potentialMain="false" public="true" uriIndex="7">
+      <compositeOp column="18" line="8" name="Sink" potentialMain="false" public="true" uriIndex="9">
         <parameter metaType="Expression" name="KAFKA_BROKERS_SASL" optional="false" type="&lt;rstring>"/>
         <parameter metaType="Expression" name="USERNAME" optional="false" type="&lt;rstring>"/>
         <parameter metaType="Expression" name="PASSWORD" optional="false" type="&lt;rstring>"/>
@@ -127,16 +104,37 @@
         <parameter defaultValue="&quot;HTTPS&quot;" metaType="Expression" name="SSL_ENDPOINT_IDENTIFICATION_ALGORITHM" optional="true" type="&lt;rstring>"/>
         <inputPort name="KafkaSinkStream" portIndex="0" type="stream&lt;rstring topic, rstring key, rstring message>"/>
       </compositeOp>
+      <compositeOp column="18" line="6" name="SubmitHazards" potentialMain="false" public="true" uriIndex="10">
+        <parameter metaType="Expression" name="KAFKA_BROKERS_SASL" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="USERNAME" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="PASSWORD" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="TOPIC" optional="false" type="&lt;rstring>"/>
+        <parameter defaultValue="&quot;{\&quot;timestamp:\&quot;&quot; + (rstring)getTimestampInSecs() + &quot;\&quot;}&quot;" metaType="Expression" name="KEY" optional="true" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="SHIELD_ID" optional="false" type="&lt;rstring>"/>
+        <inputPort name="HazardStream" portIndex="0" type="stream&lt;Hazard>"/>
+      </compositeOp>
     </namespace>
     <namespace name="com.ibm.iot4i.events.MH">
-      <compositeOp column="18" line="3" name="AnnotatedSource" potentialMain="false" public="true" uriIndex="1">
+      <compositeOp column="18" line="3" name="AnnotatedSource" potentialMain="false" public="true" uriIndex="3">
         <parameter metaType="Expression" name="KAFKA_BROKERS_SASL" optional="false" type="&lt;rstring>"/>
         <parameter metaType="Expression" name="USERNAME" optional="false" type="&lt;rstring>"/>
         <parameter metaType="Expression" name="PASSWORD" optional="false" type="&lt;rstring>"/>
         <parameter metaType="Expression" name="TOPIC" optional="false" type="&lt;rstring>"/>
         <outputPort name="AnnotatedStream" portIndex="0" type="stream&lt;rstring userId, rstring key, rstring message>"/>
       </compositeOp>
-      <compositeOp column="18" line="6" name="Source" potentialMain="false" public="true" uriIndex="2">
+      <compositeOp column="18" line="5" name="CheckActivation" potentialMain="false" public="true" uriIndex="4">
+        <parameter metaType="Expression" name="KAFKA_BROKERS_SASL" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="USERNAME" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="PASSWORD" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="TOPIC" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="API_URL" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="API_TOKEN" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="TENANT_ID" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="SHIELD_ID" optional="false" type="&lt;rstring>"/>
+        <inputPort name="SourceStream" portIndex="0" type="stream&lt;rstring userId, rstring key, rstring message>"/>
+        <outputPort name="ValidatedStream" portIndex="0" type="stream&lt;rstring userId, rstring key, rstring message>"/>
+      </compositeOp>
+      <compositeOp column="18" line="6" name="Source" potentialMain="false" public="true" uriIndex="5">
         <parameter metaType="Expression" name="KAFKA_BROKERS_SASL" optional="false" type="&lt;rstring>"/>
         <parameter metaType="Expression" name="USERNAME" optional="false" type="&lt;rstring>"/>
         <parameter metaType="Expression" name="PASSWORD" optional="false" type="&lt;rstring>"/>
@@ -150,18 +148,6 @@
         <parameter defaultValue="&quot;JKS&quot;" metaType="Expression" name="SSL_TRUST_STORE_TYPE" optional="true" type="&lt;rstring>"/>
         <parameter defaultValue="&quot;HTTPS&quot;" metaType="Expression" name="SSL_ENDPOINT_IDENTIFICATION_ALGORITHM" optional="true" type="&lt;rstring>"/>
         <outputPort name="SourceStream" portIndex="0" type="stream&lt;rstring key, rstring message>"/>
-      </compositeOp>
-      <compositeOp column="18" line="5" name="CheckActivation" potentialMain="false" public="true" uriIndex="3">
-        <parameter metaType="Expression" name="KAFKA_BROKERS_SASL" optional="false" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="USERNAME" optional="false" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="PASSWORD" optional="false" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="TOPIC" optional="false" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="API_URL" optional="false" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="API_TOKEN" optional="false" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="TENANT_ID" optional="false" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="SHIELD_ID" optional="false" type="&lt;rstring>"/>
-        <inputPort name="SourceStream" portIndex="0" type="stream&lt;rstring userId, rstring key, rstring message>"/>
-        <outputPort name="ValidatedStream" portIndex="0" type="stream&lt;rstring userId, rstring key, rstring message>"/>
       </compositeOp>
       <function modelUriIndex="15" name="getUserId" native="true" public="true" returnType="T" uriIndex="0">
         <prototype>&lt;string T&gt; public T getUserId(T message)</prototype>
@@ -205,20 +191,7 @@ Specifies command-line arguments that are passed to the Java virtual machine tha
       </primitiveOp>
     </namespace>
     <namespace name="com.ibm.iot4i.hazards.IoTP">
-      <compositeOp column="18" line="6" name="SubmitHazards" potentialMain="false" public="true" uriIndex="4">
-        <parameter metaType="Expression" name="ORG" optional="false" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="AUTH_KEY" optional="false" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="AUTH_TOKEN" optional="false" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="QOS" optional="false" type="&lt;int32>"/>
-        <parameter defaultValue="(rstring)jobID() + &quot;_cmd&quot;" metaType="Expression" name="SINK_APP_ID" optional="true" type="&lt;rstring>"/>
-        <parameter defaultValue="&quot;iot-2/type/hazard/id/shield/cmd/hazardDetected/fmt/json&quot;" metaType="Expression" name="SINK_TOPIC" optional="true" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="SHIELD_ID" optional="false" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="API_URL" optional="false" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="API_TOKEN" optional="false" type="&lt;rstring>"/>
-        <parameter metaType="Expression" name="TENANT_ID" optional="false" type="&lt;rstring>"/>
-        <inputPort name="HazardStream" portIndex="0" type="stream&lt;Hazard>"/>
-      </compositeOp>
-      <compositeOp column="18" line="7" name="Sink" potentialMain="false" public="true" uriIndex="5">
+      <compositeOp column="18" line="7" name="Sink" potentialMain="false" public="true" uriIndex="7">
         <parameter metaType="Expression" name="ORG" optional="false" type="&lt;rstring>"/>
         <parameter metaType="Expression" name="AUTH_KEY" optional="false" type="&lt;rstring>"/>
         <parameter metaType="Expression" name="AUTH_TOKEN" optional="false" type="&lt;rstring>"/>
@@ -230,6 +203,19 @@ Specifies command-line arguments that are passed to the Java virtual machine tha
         <parameter defaultValue="&quot;streamsx.iotf.123&quot;" metaType="Expression" name="TRUST_STORE_PASSWORD" optional="true" type="&lt;rstring>"/>
         <parameter defaultValue="getThisToolkitDir() + &quot;/opt/messaging.ts&quot;" metaType="Expression" name="TRUST_STORE" optional="true" type="&lt;rstring>"/>
         <inputPort name="PreparedHazardStream" portIndex="0" type="stream&lt;rstring data>"/>
+      </compositeOp>
+      <compositeOp column="18" line="6" name="SubmitHazards" potentialMain="false" public="true" uriIndex="8">
+        <parameter metaType="Expression" name="ORG" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="AUTH_KEY" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="AUTH_TOKEN" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="QOS" optional="false" type="&lt;int32>"/>
+        <parameter defaultValue="(rstring)jobID() + &quot;_cmd&quot;" metaType="Expression" name="SINK_APP_ID" optional="true" type="&lt;rstring>"/>
+        <parameter defaultValue="&quot;iot-2/type/hazard/id/shield/cmd/hazardDetected/fmt/json&quot;" metaType="Expression" name="SINK_TOPIC" optional="true" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="SHIELD_ID" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="API_URL" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="API_TOKEN" optional="false" type="&lt;rstring>"/>
+        <parameter metaType="Expression" name="TENANT_ID" optional="false" type="&lt;rstring>"/>
+        <inputPort name="HazardStream" portIndex="0" type="stream&lt;Hazard>"/>
       </compositeOp>
     </namespace>
     <dependency>

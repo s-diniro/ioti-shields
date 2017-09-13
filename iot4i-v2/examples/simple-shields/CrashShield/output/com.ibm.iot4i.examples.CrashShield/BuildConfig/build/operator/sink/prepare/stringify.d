@@ -293,13 +293,9 @@ build/operator/sink/prepare/stringify.o: \
  /opt/ibm/InfoSphere_Streams/4.2.1.1//include/SPL/Runtime/Type/TupleType.h \
  /opt/ibm/InfoSphere_Streams/4.2.1.1//include/SPL/Runtime/Utility/CV.h \
  /opt/ibm/InfoSphere_Streams/4.2.1.1//system/impl/include/UTILS/CV.h \
- src/operator/sink/prepare/./../../../type/BeJwrMS42Ky1OLfJMySm2LEosdy1LzSspLjY0SkwuyczPC0gsSswtBgAMAA5M.h \
+ src/operator/sink/prepare/./../../../type/BeJwrMS42Ky1OLfJMKbYsSix3LUvNKykuNjRKTC7JzM8LSCxKzC0GAPzQA3g.h \
  src/operator/sink/prepare/./../../../type/BeJwrMSw2SUksSQQADLECDn.h \
  src/operator/sink/prepare/./../../../type/BeJyrNI03TS0qyi8yKU8syjPJzEvLN01JTSpNNy0pSkxOBQC5eQu5.h \
- /home/streamsadmin/workspace/iot4i-shield-toolkit/com.ibm.iot4i.hazards.common/native.function/./SPL_JNIFunctions_com_ibm_iot4i_hazards_common.h \
- /opt/ibm/InfoSphere_Streams/4.2.1.1//system/impl/include/SPL/Runtime/Function/SPLJavaFunction.h \
- /opt/ibm/InfoSphere_Streams/4.2.1.1/java/include/jni.h \
- /opt/ibm/InfoSphere_Streams/4.2.1.1/java/include/jniport.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/bitset \
  /opt/ibm/InfoSphere_Streams/4.2.1.1//include/SPL/Runtime/Function/SPLFunctions.h \
  /opt/ibm/InfoSphere_Streams/4.2.1.1//system/impl/include/SPL/Runtime/Function/SPLCast.h \
