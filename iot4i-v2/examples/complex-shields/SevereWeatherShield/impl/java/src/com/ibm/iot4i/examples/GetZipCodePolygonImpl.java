@@ -9,19 +9,19 @@ import com.ibm.streams.function.model.Function;
 import com.ibm.streams.toolkit.model.ToolkitLibraries;
 
 @ToolkitLibraries("impl/lib/*")
-public class GetZipCodeImpl {
+public class GetZipCodePolygonImpl {
 
-	static Logger logger = Logger.getLogger(GetZipCodeImpl.class);
+	static Logger logger = Logger.getLogger(GetZipCodePolygonImpl.class);
 
-	@Function(namespace = "com.ibm.iot4i.examples", name = "getZipCode", description = "", stateful = false)
-	public static String getZipCode(String message) {
+	@Function(namespace = "com.ibm.iot4i.examples", name = "getZipCodePolygon", description = "", stateful = false)
+	public static String getZipCodePolygon(String message) {
 		JsonObject jsonMessage = null;
 		try {
 			jsonMessage = new JsonParser().parse(message).getAsJsonObject();
 			logger.log(Level.DEBUG, "Message to check: " + jsonMessage.toString());
-			return jsonMessage.get("zipCode").getAsString();
+			return jsonMessage.get("polygon").getAsString();
 		} catch (Exception e) {
-			logger.log(Level.DEBUG, "get zipCode failed, error: " + e.getLocalizedMessage());
+			logger.log(Level.DEBUG, "get polygon failed, error: " + e.getLocalizedMessage());
 			return null;
 		}
 	}

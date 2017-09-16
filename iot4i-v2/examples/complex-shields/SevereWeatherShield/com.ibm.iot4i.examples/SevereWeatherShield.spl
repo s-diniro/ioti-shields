@@ -3,11 +3,13 @@ namespace com.ibm.iot4i.examples ;
 use com.ibm.iot4i.hazards.MH::* ;
 use com.ibm.iot4i.events.MH::* ;
 use com.ibm.iot4i.models::Hazard ;
+use com.ibm.streams.geospatial.ext::* ;
+use com.ibm.streams.geospatial.st::* ;
 type SensorEventDataSchema = rstring userId, rstring key, rstring message,
-	rstring zipCode, rstring countryCode ;
-type WeatherDataSchema = rstring message, rstring zipCode, rstring countryCode,
-	int32 temperature ;
-	
+	float64 longitude, float64 latitude ;
+type WeatherDataSchema = rstring message, rstring zipCode,
+	rstring zipCodePolygon, int32 temperature ;
+
 composite SevereWeatherShield
 {
 	param
@@ -49,12 +51,12 @@ composite SevereWeatherShield
 				WeatherEventData : sliding, count(0), count(1), partitioned ;
 				SensorEventData : sliding, time(30), count(1), partitioned ;
 			param
-				match : WeatherEventData.temperature > 42 ;
+				match : contains(polygon(WeatherEventData.zipCodePolygon),
+					point(SensorEventData.longitude, SensorEventData.latitude)) &&
+					WeatherEventData.temperature > 42 ;
 				algorithm : inner ;
 				partitionByLHS : WeatherEventData.zipCode ;
 				partitionByRHS : SensorEventData.userId ;
-				equalityLHS : WeatherEventData.zipCode ;
-				equalityRHS : SensorEventData.zipCode ;
 			output
 				HazardStream : userId = SensorEventData.userId, rawEvents = "[" +
 					SensorEventData.message + "," + WeatherEventData.message + "]",
@@ -73,6 +75,7 @@ composite SevereWeatherShield
 				TOPIC : $SINK_TOPIC ;
 				SHIELD_ID : $SHIELD_ID ;
 		}
+
 }
 
 composite SensorEventsOp(output stream<SensorEventDataSchema> SensorEventData )
@@ -105,21 +108,21 @@ composite SensorEventsOp(output stream<SensorEventDataSchema> SensorEventData )
 			logic
 				state :
 				{
-					mutable rstring _zipCode ;
-					mutable rstring _countryCode ;
+					mutable float64 _longitude ;
+					mutable float64 _latitude ;
 				}
 
 				onTuple FilteredStream :
 				{
 					println("Sensor Event Data:") ;
 					println(message) ;
-					_zipCode = getZipCode(message, false) ;
-					_countryCode = getCountryCode(message, false) ;
+					_longitude = getLongitude(message) ;
+					_latitude = getLatitude(message) ;
 				}
 
 			output
-				SensorEventData : userId = userId, key = key, message = message, zipCode =
-					_zipCode, countryCode = _countryCode ;
+				SensorEventData : userId = userId, key = key, message = message,
+					longitude = _longitude, latitude = _latitude ;
 		}
 
 }
@@ -156,8 +159,8 @@ composite WeatherDataOp(output stream<WeatherDataSchema> WeatherData )
 			logic
 				state :
 				{
+					mutable rstring _zipCodePolygon ;
 					mutable rstring _zipCode ;
-					mutable rstring _countryCode ;
 					mutable int32 _temperature ;
 				}
 
@@ -165,14 +168,14 @@ composite WeatherDataOp(output stream<WeatherDataSchema> WeatherData )
 				{
 					println("Weather Data:") ;
 					println(message) ;
-					_zipCode = getZipCode(message, true) ;
-					_countryCode = getCountryCode(message, true) ;
+					_zipCodePolygon = getZipCodePolygon(message) ;
 					_temperature = getTemperature(message) ;
+					_zipCode = getZipCode(message) ;
 				}
 
 			output
-				WeatherData : message = message, zipCode = _zipCode, countryCode =
-					_countryCode, temperature = _temperature ;
+				WeatherData : message = message, zipCode = _zipCode, zipCodePolygon =
+					_zipCodePolygon, temperature = _temperature ;
 		}
 
 }

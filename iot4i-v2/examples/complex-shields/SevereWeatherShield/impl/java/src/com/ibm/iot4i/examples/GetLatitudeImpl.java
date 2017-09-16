@@ -9,20 +9,21 @@ import com.ibm.streams.function.model.Function;
 import com.ibm.streams.toolkit.model.ToolkitLibraries;
 
 @ToolkitLibraries("impl/lib/*")
-public class GetZipCodeImpl {
+public class GetLatitudeImpl {
 
-	static Logger logger = Logger.getLogger(GetZipCodeImpl.class);
+	static Logger logger = Logger.getLogger(GetLatitudeImpl.class);
 
-	@Function(namespace = "com.ibm.iot4i.examples", name = "getZipCode", description = "", stateful = false)
-	public static String getZipCode(String message) {
+	@Function(namespace = "com.ibm.iot4i.examples", name = "getLatitude", description = "", stateful = false)
+	public static double getLatitude(String message) {
 		JsonObject jsonMessage = null;
 		try {
 			jsonMessage = new JsonParser().parse(message).getAsJsonObject();
 			logger.log(Level.DEBUG, "Message to check: " + jsonMessage.toString());
-			return jsonMessage.get("zipCode").getAsString();
+			JsonObject rawEvent = jsonMessage.getAsJsonObject("event");
+			return rawEvent.getAsJsonObject("location").getAsJsonObject("geoPoint").get("latitude").getAsDouble();
 		} catch (Exception e) {
-			logger.log(Level.DEBUG, "get zipCode failed, error: " + e.getLocalizedMessage());
-			return null;
+			logger.log(Level.DEBUG, "get Latitude failed, error: " + e.getLocalizedMessage());
+			return 0;
 		}
 	}
 

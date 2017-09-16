@@ -18,7 +18,7 @@ public class WeatherEntryConditionImpl {
 			jsonMessage = new JsonParser().parse(message).getAsJsonObject();
 			logger.log(Level.DEBUG, "Message to check: " + jsonMessage.toString());
 			return (jsonMessage.get("data") != null && jsonMessage.get("zipCode") != null
-					&& jsonMessage.get("countryCode") != null
+					&& jsonMessage.get("polygon") != null
 					&& jsonMessage.getAsJsonObject("data").get("observation") != null);
 		} catch (Exception e) {
 			logger.log(Level.WARN, "weather entry condition check failed, error: " + e.getLocalizedMessage());
