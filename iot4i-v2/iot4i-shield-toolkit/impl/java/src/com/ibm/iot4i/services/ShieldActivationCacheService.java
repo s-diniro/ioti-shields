@@ -22,6 +22,8 @@ public class ShieldActivationCacheService {
 	private String apiToken;
 	private String tenantId;
 	private ShieldActivationService shieldActivationService;
+	private int skip = 0;
+	private int limit = 50000;
 
 	private Map<String, ArrayList<String>> userShieldMapCache;
 
@@ -37,11 +39,10 @@ public class ShieldActivationCacheService {
 	}
 
 	private void setUserShieldActivationsMapping() throws IOException {
-		// TODO do it in batches, now assuming max is 50k mappings
-		Call<ListResponse> activationsListCall = this.shieldActivationService.listShieldActivations(this.tenantId, 0,
-				50000, false, false, "all", null);
+		Call<ListResponse> activationsListCall = this.shieldActivationService.listShieldActivations(this.tenantId,
+				this.skip, this.limit, false, false, null, null);
 		Response<ListResponse> activationsResponse = activationsListCall.execute();
-		if (activationsResponse.body() != null) {
+		if (activationsResponse.isSuccessful()) {
 			for (JsonObject item : activationsResponse.body().getItems()) {
 				String key = item.get("key").getAsJsonArray().get(0).getAsString();
 				ArrayList<String> shieldActivations = userShieldMapCache.get(key);
@@ -52,7 +53,12 @@ public class ShieldActivationCacheService {
 				shieldActivations.add(item.get("value").getAsString());
 				userShieldMapCache.put(key, shieldActivations);
 			}
-			Logger.getLogger(this.getClass()).log(Level.WARN, "User shield mapping was set successfully ");
+			if (activationsResponse.body().getItems().size() >= this.limit) {
+				this.skip += this.limit;
+				setUserShieldActivationsMapping();
+			} else {
+				Logger.getLogger(this.getClass()).log(Level.WARN, "User shield mapping was set successfully ");
+			}
 		} else {
 			Logger.getLogger(this.getClass()).log(Level.WARN,
 					"Not able to retrieve user-to-shield-activation mappings, error: "
