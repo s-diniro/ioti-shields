@@ -20,8 +20,7 @@ public class EventEntryConditionImpl {
 			jsonMessage = new JsonParser().parse(message).getAsJsonObject();
 			logger.log(Level.DEBUG, "Message to check: " + jsonMessage.toString());
 			JsonObject rawEvent = jsonMessage.getAsJsonObject("event");
-			return (rawEvent.get("location") != null && rawEvent.getAsJsonObject("location").get("zipCode") != null
-					&& rawEvent.getAsJsonObject("location").get("countryCode") != null
+			return (rawEvent.get("location") != null
 					&& rawEvent.get("traitStates") != null
 					&& rawEvent.getAsJsonObject("traitStates").get("traitStates") != null
 					&& rawEvent.getAsJsonObject("traitStates").getAsJsonObject("traitStates")

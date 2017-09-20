@@ -14,21 +14,15 @@ public class GetZipCodeImpl {
 	static Logger logger = Logger.getLogger(GetZipCodeImpl.class);
 
 	@Function(namespace = "com.ibm.iot4i.examples", name = "getZipCode", description = "", stateful = false)
-	public static String getZipCode(String message, boolean isWeatherData) {
+	public static String getZipCode(String message) {
 		JsonObject jsonMessage = null;
-		String zipCode = null;
 		try {
 			jsonMessage = new JsonParser().parse(message).getAsJsonObject();
 			logger.log(Level.DEBUG, "Message to check: " + jsonMessage.toString());
-			if (isWeatherData) {
-				zipCode = jsonMessage.get("zipCode").getAsString();
-			} else {
-				JsonObject rawEvent = jsonMessage.getAsJsonObject("event");
-				zipCode = rawEvent.getAsJsonObject("location").get("zipCode").getAsString();
-			}
-			return zipCode;
+			return jsonMessage.get("location").getAsJsonObject().getAsJsonObject("properties").get("zipCode")
+					.getAsString();
 		} catch (Exception e) {
-			logger.log(Level.DEBUG, "get zip code failed, error: " + e.getLocalizedMessage());
+			logger.log(Level.DEBUG, "get zipCode failed, error: " + e.getLocalizedMessage());
 			return null;
 		}
 	}

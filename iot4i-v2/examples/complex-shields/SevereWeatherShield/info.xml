@@ -11,5 +11,9 @@
       <common:name>iot4i-shield-toolkit</common:name>
       <common:version>1.0.0</common:version>
     </info:toolkit>
+    <info:toolkit>
+      <common:name>com.ibm.streams.geospatial</common:name>
+      <common:version>[3.1.0,4.0.0)</common:version>
+    </info:toolkit>
   </info:dependencies>
 </info:toolkitInfoModel>
