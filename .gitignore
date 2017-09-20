@@ -1,7 +1,6 @@
 /.project
 .apt_generated
 bin
-native.function
 
 ## C++ excludes
 # Compiled Object files
