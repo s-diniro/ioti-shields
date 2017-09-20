@@ -19,7 +19,8 @@ public class GetZipCodeImpl {
 		try {
 			jsonMessage = new JsonParser().parse(message).getAsJsonObject();
 			logger.log(Level.DEBUG, "Message to check: " + jsonMessage.toString());
-			return jsonMessage.get("zipCode").getAsString();
+			return jsonMessage.get("location").getAsJsonObject().getAsJsonObject("properties").get("zipCode")
+					.getAsString();
 		} catch (Exception e) {
 			logger.log(Level.DEBUG, "get zipCode failed, error: " + e.getLocalizedMessage());
 			return null;

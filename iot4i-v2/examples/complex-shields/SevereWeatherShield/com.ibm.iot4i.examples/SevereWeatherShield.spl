@@ -6,9 +6,9 @@ use com.ibm.iot4i.models::Hazard ;
 use com.ibm.streams.geospatial.ext::* ;
 use com.ibm.streams.geospatial.st::* ;
 type SensorEventDataSchema = rstring userId, rstring key, rstring message,
-	float64 longitude, float64 latitude ;
-type WeatherDataSchema = rstring message, rstring zipCode,
-	rstring zipCodePolygon, int32 temperature ;
+	rstring WKTLocation ;
+type WeatherDataSchema = rstring message, rstring zipCode, rstring WKTLocation,
+	int32 temperature ;
 
 composite SevereWeatherShield
 {
@@ -44,16 +44,14 @@ composite SevereWeatherShield
 				WEATHER_TOPIC : $WEATHER_TOPIC ;
 		}
 
-		@catch(exception = all, tupleTrace = true, stackTrace = true)
 		stream<Hazard> HazardStream = Join(WeatherEventData ; SensorEventData)
 		{
 			window
 				WeatherEventData : sliding, count(0), count(1), partitioned ;
 				SensorEventData : sliding, time(30), count(1), partitioned ;
 			param
-				match : contains(polygon(WeatherEventData.zipCodePolygon),
-					point(SensorEventData.longitude, SensorEventData.latitude)) &&
-					WeatherEventData.temperature > 42 ;
+				match : contains(WeatherEventData.WKTLocation, SensorEventData.WKTLocation)
+					&& WeatherEventData.temperature > 42 ;
 				algorithm : inner ;
 				partitionByLHS : WeatherEventData.zipCode ;
 				partitionByRHS : SensorEventData.userId ;
@@ -108,21 +106,19 @@ composite SensorEventsOp(output stream<SensorEventDataSchema> SensorEventData )
 			logic
 				state :
 				{
-					mutable float64 _longitude ;
-					mutable float64 _latitude ;
+					mutable rstring _WKTLocation ;
 				}
 
 				onTuple FilteredStream :
 				{
 					println("Sensor Event Data:") ;
 					println(message) ;
-					_longitude = getLongitude(message) ;
-					_latitude = getLatitude(message) ;
+					_WKTLocation = getLocationAsWKT(message, true) ;
 				}
 
 			output
 				SensorEventData : userId = userId, key = key, message = message,
-					longitude = _longitude, latitude = _latitude ;
+					WKTLocation = _WKTLocation ;
 		}
 
 }
@@ -159,7 +155,7 @@ composite WeatherDataOp(output stream<WeatherDataSchema> WeatherData )
 			logic
 				state :
 				{
-					mutable rstring _zipCodePolygon ;
+					mutable rstring _WKTLocation ;
 					mutable rstring _zipCode ;
 					mutable int32 _temperature ;
 				}
@@ -168,14 +164,14 @@ composite WeatherDataOp(output stream<WeatherDataSchema> WeatherData )
 				{
 					println("Weather Data:") ;
 					println(message) ;
-					_zipCodePolygon = getZipCodePolygon(message) ;
+					_WKTLocation = getLocationAsWKT(message, false) ;
 					_temperature = getTemperature(message) ;
 					_zipCode = getZipCode(message) ;
 				}
 
 			output
-				WeatherData : message = message, zipCode = _zipCode, zipCodePolygon =
-					_zipCodePolygon, temperature = _temperature ;
+				WeatherData : message = message, zipCode = _zipCode, WKTLocation =
+					_WKTLocation, temperature = _temperature ;
 		}
 
 }
