@@ -1,4 +1,4 @@
-// eJylUl1v2jAUlV_17K7JqD4lUkQ9gqry2ElCmkQYKMjzsKXKJAZfEzmzTNFT973UcylqUPUxzvo_1vvTn3niPztCVIihXlDKcQ_1tixpeIC_0MDTRwect1pufaoyJ26fhIUYo05wV_1r30SoclygLoiGXSelHeyTz6PGXh7bFrlzupwNvLZEsVH_1dG_1d63XFrc_16XekWAFluJZrPebTQc3LLmyFJMRl57jrzfJb0s7xaXsnychvvhUzTx_1HCO8smk9HK0fb7vzwZdMtt1qzpXaBrF4WRkOtNdynjJs5g_06IurDo03eI9FYtCM6z_1f6L6_1gZSqrx7QqRAKqQRla2AwvwELGrB2A9ZpwLo1tqNMtQMAgLvhGXF1BMGZxElGmVtwsZU5XhJ3ILDcoA0laeImWGHAOCOe1mpFU0Uq0UyxB85Tgpn_0tGnOhW6ktSYq3kkiRontWF_0uLdOeA4bPuSBS6qkYwQ_1RdZX_1khpQIIyDXs4svejKspu5XNdcAsexTGS1Xo5v1YLQ0DnKB_0FCUZ1TQojzfC6W9jvdf_1cHhAUW7MJQaNePTv3oOt_0PLF7PXs8AaIOaNHjXT_0Bi_0ESYklpIqa4O8A3AhucUC63gMbgaL28Y76nzQQYqHY26f3JPXOeDw1A_02hpC7WAItbH1rXI2hAdrmx3tbZMUf87RYoSSM2QK_1zTxtvH5hdWk12f0OIHTjY8jsB1HN_18GLXBiA6
+// eJylU11v2jAUlV_15FRnaA9Eo_0YJBs3VSm7KpEFJY4GFPlZsYcAlJajuQgPjvcwyECXkP0wyK7aNzrXPvPZemUYugCDKcxDCy7e9ZHLCEAAPo_1GeBequlHf_0sSJH2gAZbMvLb5rAwnt35YDR8_1UV9nFvubOMNi1Xmvf0cTp3uYDfqub6TD3eO_1uN_0vJvcW4vWsv6X57amP1tRfzK5f3T7zmMsZxbEe9Ktqa_0_1F7hXDGc9WryNB7v_0xvV0YzD1U88r9NRf5c8PE6eDJlmnfEcHhgEizD7qwB_07tk0oIzheAIEZEsyUYJYEa0uwjgT7LMG6EqwnwW5lmk_0JZDhmlgkA0NYoxFCj8xe6hASFGk4YvqFLjKKQlpc2vtmYGsrhOo0Q1Sgu94rgEEiXvrhoIWQQxEmMDBBAFiwByzj1K4qz9Z5rQHBNm5SFTRhFzZJ2UFAeoLQ0T_1M1SSIEY0WETAkMUAVRBoOVgL6VluLRdQAYydD5a4A5jhgqbSdyOwXyawOnCeHNay0Qe8koIk9hQ1U_03CmipSro5ylBlHIBwrIn9vGV_1zErwICIEdjXFL7wXGnIpdwdpXRVVRHMcu2rU7lsW6gRk8V1UtueMcxjCtuGaTolQeOs9t8dbttbSOKmkNA7brfHzdDVL5WMQ_01QA7z0R9Xg7CcCt_10NihmtECgkjiHhna7AsrCJpLDXYwvWoOygMNEl9mrGeEtPSwyH8kmRlVXluBio86F9PljqVUiVxCXKvOb8mdaFZqg8s9_1fzohz
 
 
 
@@ -16,10 +16,9 @@
 #include <SPL/Runtime/Utility/CV.h>
 using namespace UTILS_NAMESPACE;
 
-#include "../../../type/BeJwrMS42Ky1OLfJMySm2LEosdy1LzSspLjY0SkwuyczPC0gsSswtBgAMAA5M.h"
+#include "../../../type/BeJwrMS42Ky1OLfJMKbYsSix3LUvNKykuNjRKTC7JzM8LSCxKzC0GAPzQA3g.h"
 #include "../../../type/BeJwrMSw2SUksSQQADLECDn.h"
 #include "../../../type/BeJyrNI03TS0qyi8yKU8syjPJzEvLN01JTSpNNy0pSkxOBQC5eQu5.h"
-#include <SPL_JNIFunctions_com_ibm_iot4i_hazards_common.h>
 
 #include <bitset>
 
@@ -36,7 +35,7 @@ class MY_BASE_OPERATOR : public Operator
 {
 public:
     
-    typedef SPL::BeJwrMS42Ky1OLfJMySm2LEosdy1LzSspLjY0SkwuyczPC0gsSswtBgAMAA5M IPort0Type;
+    typedef SPL::BeJwrMS42Ky1OLfJMKbYsSix3LUvNKykuNjRKTC7JzM8LSCxKzC0GAPzQA3g IPort0Type;
     typedef SPL::BeJwrMSw2SUksSQQADLECDn OPort0Type;
     
     MY_BASE_OPERATOR();
@@ -67,7 +66,12 @@ public:
     SPL::rstring lit$2;
     SPL::rstring lit$3;
     SPL::rstring lit$4;
-    SPL::uint32 lit$5;
+    SPL::rstring lit$5;
+    SPL::rstring lit$6;
+    SPL::rstring lit$7;
+    SPL::rstring lit$8;
+    SPL::rstring lit$9;
+    SPL::uint32 lit$10;
     
     
 protected:
@@ -88,6 +92,7 @@ private:
     static bool globalInit_;
     static bool globalIniter();
     ParameterMapType paramValues_;
+    Metric* metrics_[1];
     ParameterMapType& getParameters() { return paramValues_;}
     void addParameterValue(std::string const & param, ConstValueHandle const& value)
     {

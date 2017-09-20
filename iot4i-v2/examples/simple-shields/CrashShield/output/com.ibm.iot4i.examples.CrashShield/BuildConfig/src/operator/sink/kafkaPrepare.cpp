@@ -1,4 +1,4 @@
-// eJyNUl1rwjAU5f6TInto2Whq1T2EMXDqwFG3SeazhJrZ0DYJSVxxv35JcCKiYyQPuV_1n3nNujGpSzRpquRS0wfh5J0orNfQhcyeHXpoid_01eMfTEXjq9IMO8KOuv_1azbvZrRmyZd_1p1ltqhHi49uNaZkPp_1atOpdKu1ysqoNWS7H02I2mQqflsEAGm5vMiDvBcbaWM3FFoKvf8GXn_1kAVbJlyJmMtoZuWi5QJ3VtFC0ZmmhqKlJx1mzQhloKQgrmqXmCXEl9bHxlROCggxbgSgLCb2ePIC8g_1EcfaB3qAKxUvDwBPOPbPxCu2f6vpDgOWkW3EcYhZFSzLqmxD6eJd1GwPhtJ7f0wesTYp8SHkrB39wcMxh_08ZRhvmfUPY2mr5oKw0sRJkrgeYVcJuJChW3Z9rqO8qYNae_0XixEn2A8nyL_1E
+// eJyNkmFr2zAQhrl_1YsI_02My1HTftB1EKXdNBRrqtOP0cNPkaC8uW0cl1s7H_1Pkm0oZS0DAvbd3rvlfScaFCZQcWt1D1XjH0de2G1gTkU7ilhlmW5G3Y_1YP4Fv03mtlqUa9E_07m_0m8Tud_1TDVVP4uCrtuz2430_10Vr1arpc2a2bHSqazuW6ru7q6W65vrZe9lBZyCkvZTAdXPNWOGrJH9DkJufiRXvslB3mEteU4PW2q4wTqX2soTaiSqmnywkCePZY5PvBsUUk7Sfw_0Ca8OpqUKQ19xy6HWPcxDcigbs6KQX2I_1dH7ce8o5SsnXKlUq97G_0ETwIHDy_19pbVC3kehZGO4wEOKLBdtSF26w85c9QzAmhFf3kXgLQdtDhzeIQYSTGgNuJKw3RcQ3kEfcfifdkHnXE_1B6kGKV4Zv8M_0f_0be4_10gUx6F10eeIsTBFg9oKTvbitTCNQvSgNLfni_0iSMS_0Jn0vCNXRUibGN7JCxHVr_140h2w6qvUFCcJIlbI1ydBNwU8R2_0v68D3sxZbT25OHHI_1gFdAvK4
 
 
 #include "./kafkaPrepare.h"
@@ -51,6 +51,8 @@ MY_BASE_OPERATOR::MY_BASE_OPERATOR()
     initRTC(*this, lit$2, "lit$2");
     (void) getParameters(); // ensure thread safety by initializing here
     $oportBitset = OPortBitsetType(std::string("01"));
+    OperatorMetrics& om = getContext().getMetrics();
+    metrics_[0] = &(om.createCustomMetric("nExceptionsCaughtPort0", "Number of exceptions caught on port 0", Metric::Counter));
 }
 MY_BASE_OPERATOR::~MY_BASE_OPERATOR()
 {
@@ -67,8 +69,44 @@ void MY_BASE_OPERATOR::tupleLogic(Tuple const & tuple, uint32_t port) {
 
 
 void MY_BASE_OPERATOR::processRaw(Tuple const & tuple, uint32_t port) {
-    tupleLogic (tuple, port);
-    static_cast<MY_OPERATOR_SCOPE::MY_OPERATOR*>(this)->MY_OPERATOR::process(tuple, port);
+    try {
+            tupleLogic (tuple, port);
+            static_cast<MY_OPERATOR_SCOPE::MY_OPERATOR*>(this)->MY_OPERATOR::process(tuple, port);
+    } catch (SPL::SPLRuntimeException const & e) {
+        if (getContext().getPE().mustRethrowException()) {
+            throw e;
+        }
+        SPLAPPTRC(L_ERROR, "Exception in operator " << getContext().getName()
+            << " in port " << port, SPL_OPER_DBG);
+        SPLAPPTRC(L_ERROR, "Processed tuple: " << tuple, SPL_OPER_DBG);
+        SPLAPPTRC(L_ERROR, "Exception: " << e, SPL_OPER_DBG);
+        metrics_[port]->incrementValue();
+    }
+    catch (std::exception const & e) {
+        if (getContext().getPE().mustRethrowException()) {
+            throw e;
+        }
+        SPLAPPTRC(L_ERROR, "Exception in operator " << getContext().getName()
+            << " in port " << port, SPL_OPER_DBG);
+        SPLAPPTRC(L_ERROR, "Processed tuple: " << tuple, SPL_OPER_DBG);
+        SPLAPPTRC(L_ERROR, "Exception identifier: " << e.what(), SPL_OPER_DBG);
+        std::stringstream backtrace;
+        SPL::BacktraceDumper::dump(backtrace);
+        SPLAPPTRC(L_ERROR, "Exception: " << backtrace.str(), SPL_OPER_DBG);
+        metrics_[port]->incrementValue();
+    }
+    catch (...) {
+        if (getContext().getPE().mustRethrowException()) {
+            throw;
+        }
+        SPLAPPTRC(L_ERROR, "Exception in operator " << getContext().getName()
+            << " in port " << port, SPL_OPER_DBG);
+        SPLAPPTRC(L_ERROR, "Processed tuple: " << tuple, SPL_OPER_DBG);
+        std::stringstream backtrace;
+        SPL::BacktraceDumper::dump(backtrace);
+        SPLAPPTRC(L_ERROR, "Exception: " << backtrace.str(), SPL_OPER_DBG);
+        metrics_[port]->incrementValue();
+    }
 }
 
 

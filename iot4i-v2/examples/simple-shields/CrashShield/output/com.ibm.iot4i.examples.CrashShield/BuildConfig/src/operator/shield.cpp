@@ -1,4 +1,4 @@
-// eJyVUmtL60AQZf_0JiB_1aL3n4wOsiQpTItaYPSBH8FLbJmKx5bO7O1hh_1_1Z2sbRWlgoSEzObMnJNzBtvK0VAJI1UjKs5v101qlGY_08_0g6YYeO45q_0BfcaJp2exqfH970_1j54m0_1vlar785_0EML2ZRfDZfhn9ug7_1hQ1CeO8XhD419XB9HocKs96O3GNvo_0dGLy27dp2_0LGy_1HGDtznQfTIDibDpMu40WUTGZ3VhrJxCRVdSJXdCtzKhN4FXVbATrFFUn2WSXNkceoiXONRssmZ4y5harBpRJEjSKrZeN2SpfYihTcGy2wiAsJVeZmwgjWqAaGUU_0yMjCYYaetlKpANETCuT34LIpzUsU5yaLHoIvzrTCLTr6AC0hLyzuSrdKk2MnBJDUgihxG4zELX1tNFcFtGBvUu5LfhMEk0zZMRnGuEfRdxra_0lNDv3jfUu3ogVT_0S_1iZIVpOKb_1z_01trtwe4_1rRvv6NGYadGFL9AYpHDRXG7QVx_199vjzpINhF_1Z9Go0dkWX7jBc2o4XQtCn7lW72jFz6DxVyAzJ
+// eJyVUu9P4kAQzf4nxvihxNhtQaNuLiZI0JOWwl25S_1zULHSgK2237iwI_1PVuVyEGldyl6Y_0Zvtn35s1glbsKcq6FLHnO2N2inGipiE88c7XIsetSva6A3kLvRfXj82aw9gfhtNcPRuPB6NnDCK_0jML4YjLpXd_02f3b_1t_0aWbHR8qHD9iLFat8M8yCtbzRfT0Oxh1Lnub_1lUYd1bBpuPdt4ebX_03WrD7oRzwMk170YJUZlZhMZJGIsbmlPhcJrHhR5YBudmMV50KfeMQUMaZQK1HOiM35X_0SaezlCC0gFpzhNMOMKUmo4xBlmAvIUqSU8WzbplpOiqN87QEdxzGIb0JRrTkpZgmfMnIpcQ_02q5RtLmQMvjVzGbOJje4yZ_1hgzDZpHTcjYls6ikz1wBpO55XVEJZXp3Z2BTgpA5DNwGg3SXVXKRAZup_1qOelPyP1Mlgii7FcS4vEBQDynZOjeH9e77nXoX16TyMOm_1bwQpjIhP9D7Zm_06uTWvGG9ppEMVfuksoNX5f6RPHsetydHr0taHmh92xBuF2CEOueHHwRLtqxoZXQ3QXBD
 
 
 #include "./shield.h"
@@ -21,7 +21,7 @@ void MY_OPERATOR_SCOPE::MY_OPERATOR::process(Tuple const & tuple, uint32_t port)
    IPort0Type const & iport$0 = static_cast<IPort0Type const&>(tuple);
    if (! (::SPL::JNIFunctions::com::ibm::iot4i::examples::SPL_JNIFunctions::checkCrash(iport$0.get_message())) ) 
        return;
-   { OPort0Type otuple(iport$0.get_userId(), SPL::list<SPL::rstring >().add(iport$0.get_message()), lit$0); submit (otuple, 0);
+   { OPort0Type otuple(iport$0.get_userId(), ((lit$1 + iport$0.get_message()) + lit$0), lit$2); submit (otuple, 0);
  }
    
 }
@@ -47,6 +47,8 @@ MY_BASE_OPERATOR::MY_BASE_OPERATOR()
  : Operator() {
     uint32_t index = getIndex();
     initRTC(*this, lit$0, "lit$0");
+    initRTC(*this, lit$1, "lit$1");
+    initRTC(*this, lit$2, "lit$2");
     addParameterValue ("filter");
     (void) getParameters(); // ensure thread safety by initializing here
     $oportBitset = OPortBitsetType(std::string("01"));

@@ -1,4 +1,4 @@
-// eJylUl1v2jAUlV_17K7JqD4lUkQ9gqry2ElCmkQYKMjzsKXKJAZfEzmzTNFT973UcylqUPUxzvo_1vvTn3niPztCVIihXlDKcQ_1tixpeIC_0MDTRwect1pufaoyJ26fhIUYo05wV_1r30SoclygLoiGXSelHeyTz6PGXh7bFrlzupwNvLZEsVH_1dG_1d63XFrc_16XekWAFluJZrPebTQc3LLmyFJMRl57jrzfJb0s7xaXsnychvvhUzTx_1HCO8smk9HK0fb7vzwZdMtt1qzpXaBrF4WRkOtNdynjJs5g_06IurDo03eI9FYtCM6z_1f6L6_1gZSqrx7QqRAKqQRla2AwvwELGrB2A9ZpwLo1tqNMtQMAgLvhGXF1BMGZxElGmVtwsZU5XhJ3ILDcoA0laeImWGHAOCOe1mpFU0Uq0UyxB85Tgpn_0tGnOhW6ktSYq3kkiRontWF_0uLdOeA4bPuSBS6qkYwQ_1RdZX_1khpQIIyDXs4svejKspu5XNdcAsexTGS1Xo5v1YLQ0DnKB_0FCUZ1TQojzfC6W9jvdf_1cHhAUW7MJQaNePTv3oOt_0PLF7PXs8AaIOaNHjXT_0Bi_0ESYklpIqa4O8A3AhucUC63gMbgaL28Y76nzQQYqHY26f3JPXOeDw1A_02hpC7WAItbH1rXI2hAdrmx3tbZMUf87RYoSSM2QK_1zTxtvH5hdWk12f0OIHTjY8jsB1HN_18GLXBiA6
+// eJylU11v2jAUlV_15FRnaA9Eo_0YJBs3VSm7KpEFJY4GFPlZsYcAlJajuQgPjvcwyECXkP0wyK7aNzrXPvPZemUYugCDKcxDCy7e9ZHLCEAAPo_1GeBequlHf_0sSJH2gAZbMvLb5rAwnt35YDR8_1UV9nFvubOMNi1Xmvf0cTp3uYDfqub6TD3eO_1uN_0vJvcW4vWsv6X57amP1tRfzK5f3T7zmMsZxbEe9Ktqa_0_1F7hXDGc9WryNB7v_0xvV0YzD1U88r9NRf5c8PE6eDJlmnfEcHhgEizD7qwB_07tk0oIzheAIEZEsyUYJYEa0uwjgT7LMG6EqwnwW5lmk_0JZDhmlgkA0NYoxFCj8xe6hASFGk4YvqFLjKKQlpc2vtmYGsrhOo0Q1Sgu94rgEEiXvrhoIWQQxEmMDBBAFiwByzj1K4qz9Z5rQHBNm5SFTRhFzZJ2UFAeoLQ0T_1M1SSIEY0WETAkMUAVRBoOVgL6VluLRdQAYydD5a4A5jhgqbSdyOwXyawOnCeHNay0Qe8koIk9hQ1U_03CmipSro5ylBlHIBwrIn9vGV_1zErwICIEdjXFL7wXGnIpdwdpXRVVRHMcu2rU7lsW6gRk8V1UtueMcxjCtuGaTolQeOs9t8dbttbSOKmkNA7brfHzdDVL5WMQ_01QA7z0R9Xg7CcCt_10NihmtECgkjiHhna7AsrCJpLDXYwvWoOygMNEl9mrGeEtPSwyH8kmRlVXluBio86F9PljqVUiVxCXKvOb8mdaFZqg8s9_1fzohz
 
 
 #include "./stringify.h"
@@ -21,7 +21,7 @@ void MY_OPERATOR_SCOPE::MY_OPERATOR::process(Tuple const & tuple, uint32_t port)
    IPort0Type const & iport$0 = static_cast<IPort0Type const&>(tuple);
    if (! ((iport$0.get_userId() != lit$0)) ) 
        return;
-   { OPort0Type otuple(::SPL::JNIFunctions::com::ibm::iot4i::hazards::common::SPL_JNIFunctions::getJsonStringHazard(lit$1, iport$0.get_userId(), iport$0.get_rawEvents(), iport$0.get_actionParams())); submit (otuple, 0);
+   { OPort0Type otuple(((((((((lit$6 + iport$0.get_userId()) + lit$5) + lit$4) + lit$3) + iport$0.get_rawEvents()) + lit$2) + iport$0.get_actionParams()) + lit$1)); submit (otuple, 0);
  }
    
 }
@@ -52,9 +52,16 @@ MY_BASE_OPERATOR::MY_BASE_OPERATOR()
     initRTC(*this, lit$3, "lit$3");
     initRTC(*this, lit$4, "lit$4");
     initRTC(*this, lit$5, "lit$5");
+    initRTC(*this, lit$6, "lit$6");
+    initRTC(*this, lit$7, "lit$7");
+    initRTC(*this, lit$8, "lit$8");
+    initRTC(*this, lit$9, "lit$9");
+    initRTC(*this, lit$10, "lit$10");
     addParameterValue ("filter");
     (void) getParameters(); // ensure thread safety by initializing here
     $oportBitset = OPortBitsetType(std::string("01"));
+    OperatorMetrics& om = getContext().getMetrics();
+    metrics_[0] = &(om.createCustomMetric("nExceptionsCaughtPort0", "Number of exceptions caught on port 0", Metric::Counter));
 }
 MY_BASE_OPERATOR::~MY_BASE_OPERATOR()
 {
@@ -71,9 +78,9 @@ void MY_BASE_OPERATOR::tupleLogic(Tuple const & tuple, uint32_t port) {
     AutoPortMutex $apm($svMutex, *this);
     
 {
-    if ((iport$0.get_userId() == lit$2)) 
+    if ((iport$0.get_userId() == lit$7)) 
         {
-            ::SPL::Functions::Utility::appTrc(SPL::BeJyrNI03TS0qyi8yKU8syjPJzEvLN01JTSpNNy0pSkxOBQC5eQu5::warn, lit$3, lit$4, lit$5);
+            ::SPL::Functions::Utility::appTrc(SPL::BeJyrNI03TS0qyi8yKU8syjPJzEvLN01JTSpNNy0pSkxOBQC5eQu5::warn, lit$8, lit$9, lit$10);
         }
 }
 
@@ -81,8 +88,44 @@ void MY_BASE_OPERATOR::tupleLogic(Tuple const & tuple, uint32_t port) {
 
 
 void MY_BASE_OPERATOR::processRaw(Tuple const & tuple, uint32_t port) {
-    tupleLogic (tuple, port);
-    static_cast<MY_OPERATOR_SCOPE::MY_OPERATOR*>(this)->MY_OPERATOR::process(tuple, port);
+    try {
+            tupleLogic (tuple, port);
+            static_cast<MY_OPERATOR_SCOPE::MY_OPERATOR*>(this)->MY_OPERATOR::process(tuple, port);
+    } catch (SPL::SPLRuntimeException const & e) {
+        if (getContext().getPE().mustRethrowException()) {
+            throw e;
+        }
+        SPLAPPTRC(L_ERROR, "Exception in operator " << getContext().getName()
+            << " in port " << port, SPL_OPER_DBG);
+        SPLAPPTRC(L_ERROR, "Processed tuple: " << tuple, SPL_OPER_DBG);
+        SPLAPPTRC(L_ERROR, "Exception: " << e, SPL_OPER_DBG);
+        metrics_[port]->incrementValue();
+    }
+    catch (std::exception const & e) {
+        if (getContext().getPE().mustRethrowException()) {
+            throw e;
+        }
+        SPLAPPTRC(L_ERROR, "Exception in operator " << getContext().getName()
+            << " in port " << port, SPL_OPER_DBG);
+        SPLAPPTRC(L_ERROR, "Processed tuple: " << tuple, SPL_OPER_DBG);
+        SPLAPPTRC(L_ERROR, "Exception identifier: " << e.what(), SPL_OPER_DBG);
+        std::stringstream backtrace;
+        SPL::BacktraceDumper::dump(backtrace);
+        SPLAPPTRC(L_ERROR, "Exception: " << backtrace.str(), SPL_OPER_DBG);
+        metrics_[port]->incrementValue();
+    }
+    catch (...) {
+        if (getContext().getPE().mustRethrowException()) {
+            throw;
+        }
+        SPLAPPTRC(L_ERROR, "Exception in operator " << getContext().getName()
+            << " in port " << port, SPL_OPER_DBG);
+        SPLAPPTRC(L_ERROR, "Processed tuple: " << tuple, SPL_OPER_DBG);
+        std::stringstream backtrace;
+        SPL::BacktraceDumper::dump(backtrace);
+        SPLAPPTRC(L_ERROR, "Exception: " << backtrace.str(), SPL_OPER_DBG);
+        metrics_[port]->incrementValue();
+    }
 }
 
 
