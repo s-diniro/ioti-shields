@@ -24,7 +24,7 @@ public class CheckPanicButtonImpl {
 
 			boolean isButtonPressed = (rawEvent.getAsJsonObject("d").getAsJsonObject("states").get("buttonB0") != null
 					&& rawEvent.getAsJsonObject("d").getAsJsonObject("states").getAsJsonObject("buttonB0").get("value")
-							.toString().equals("released"))
+							.getAsString().equals("released"))
 					|| (rawEvent.getAsJsonObject("d").getAsJsonObject("states").get("buttonBI") != null
 							&& rawEvent.getAsJsonObject("d").getAsJsonObject("states").getAsJsonObject("buttonBI")
 									.get("value").getAsString().equals("released"));
