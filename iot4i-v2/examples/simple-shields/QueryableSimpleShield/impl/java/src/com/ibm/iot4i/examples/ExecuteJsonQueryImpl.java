@@ -22,17 +22,20 @@ public class ExecuteJsonQueryImpl {
 	static Logger logger = Logger.getLogger(ExecuteJsonQueryImpl.class);
 
 	@Function(namespace = "com.ibm.iot4i.examples", name = "executeJsonQuery", description = "", stateful = false)
-	public static boolean executeJsonQuery(String message, String jsonQuery, String operatorName) {
+	public static boolean executeJsonQuery(String message, String[] jsonQueries, String operatorName) {
 		try {
 			JsonObject messageJson = new JsonParser().parse(message).getAsJsonObject();
 			String rawEvent = messageJson.getAsJsonObject("event").toString();
-			logger.log(Level.WARN, operatorName + ": Json query: " + jsonQuery);
 			logger.log(Level.WARN, operatorName + ": Incoming event: " + rawEvent);
+			Object parsedRawEvent = conf.jsonProvider().parse(rawEvent);
 
-			List<Object> results = JsonPath.using(conf).parse(rawEvent).read(jsonQuery);
-			if (results.size() != 0) {
-				logger.log(Level.WARN, operatorName + ": Event passed json quey, results: " + results);
-				return true;
+			for (String jsonQuery : jsonQueries) {
+				logger.log(Level.WARN, operatorName + ": Json query: " + jsonQuery);
+				List<Object> results = JsonPath.read(parsedRawEvent, jsonQuery);
+				if (results.size() != 0) {
+					logger.log(Level.WARN, operatorName + ": Event passed json query, results: " + results);
+					return true;
+				}
 			}
 
 			logger.log(Level.WARN, operatorName + ": Event failed json query");

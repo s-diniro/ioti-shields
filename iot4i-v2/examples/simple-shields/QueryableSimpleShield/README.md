@@ -7,10 +7,10 @@ This shield is using simple Json queries for the events coming from a single dat
 
 The shield has two IBM streams operators as explained below:
 
-1. A [Filter operator](https://www.ibm.com/support/knowledgecenter/en/SSCRJU_4.2.1/com.ibm.streams.toolkits.doc/spldoc/dita/tk$spl/op$spl.relational$Filter.html) at the beginning of the shield which filter events based on an entry condition. 
-2. A [Functor operator](https://www.ibm.com/support/knowledgecenter/en/SSCRJU_4.2.1/com.ibm.streams.toolkits.doc/spldoc/dita/tk$spl/op$spl.relational$Functor.html) that generate hazards based on shield condition.
+1. A [Filter operator](https://www.ibm.com/support/knowledgecenter/en/SSCRJU_4.2.1/com.ibm.streams.toolkits.doc/spldoc/dita/tk$spl/op$spl.relational$Filter.html) at the beginning of the shield which filter events based on an entry conditions. 
+2. A [Functor operator](https://www.ibm.com/support/knowledgecenter/en/SSCRJU_4.2.1/com.ibm.streams.toolkits.doc/spldoc/dita/tk$spl/op$spl.relational$Functor.html) that generate hazards based on shield conditions.
 
-Both operators uses json queries as an input which is exectued using a helper java function [executeJsonQuery(message, query)](./impl/java/src/com/ibm/iot4i/examples/ExecuteJsonQueryImpl.java).
+Both operators uses json queries as an input which is executed using a helper java function [executeJsonQuery(message, query)](./impl/java/src/com/ibm/iot4i/examples/ExecuteJsonQueryImpl.java).
 
 ![Queryable Simple Shield](./images/queryable-simple-shield.png)
 
@@ -19,8 +19,8 @@ Both operators uses json queries as an input which is exectued using a helper ja
 
 This shield expects the following parameters:
 
-- **entryConditionJsonQuery** : the json query used to provide an entry condition to filter events that doesn't belong to this shield.
-- **shieldJsonQuery** : the json query used to provide the main shield logic
+- **entryConditionJsonQueries** : the json queries used to provide an entry condition to filter events that doesn't belong to this shield.
+- **shieldJsonQueries** : the json queries used to provide the main shield logic
 - **actionParams** : the params needed by the external action, example is shown below:
 
 ```json
@@ -33,13 +33,13 @@ This shield expects the following parameters:
  ```
 
 
-These two parameters needs to be provided when submitting/updating the shield code using the [createShieldCode API](https://ioti.us-south.containers.mybluemix.net/docs/#!/shield-codes/createShieldCode) or [updateShieldCode API](https://ioti.us-south.containers.mybluemix.net/docs/#!/shield-codes/updateShieldCode). The parameters are provided as part of the **jobOptions** field like:
+These parameters needs to be provided when submitting/updating the shield code using the [createShieldCode API](https://ioti.us-south.containers.mybluemix.net/docs/#!/shield-codes/createShieldCode) or [updateShieldCode API](https://ioti.us-south.containers.mybluemix.net/docs/#!/shield-codes/updateShieldCode). The parameters are provided as part of the **jobOptions** field like:
  
  ```json
 {
    "jobOptions":{
-      "entryConditionJsonQuery":"",
-      "shieldJsonQuery":"",
+      "entryConditionJsonQueries": ["", ""],
+      "shieldJsonQueries": ["" , ""],
       "actionParams": ""
    }
 }
@@ -101,8 +101,8 @@ Below are examples of what job options needs to be provided for this shield to b
  ```Json
  {
     "jobOptions":{
-       "entryConditionJsonQuery":"$.traitStates.traitStates[?(@.Humidity.humidityPct)]",
-       "shieldJsonQuery":"$.traitStates.traitStates[?(@.Humidity.humidityPct > 60)]",
+       "entryConditionJsonQueries": ["$.traitStates.traitStates[?(@.Humidity.humidityPct)]"],
+       "shieldJsonQueries": ["$.traitStates.traitStates[?(@.Humidity.humidityPct > 60)]" ],
        "actionParams": {
           "hazardTitle":"A potential water leak was detected by the humidity sensor.",
           "emailSubject":"Alert from IoT for Insurance",
@@ -117,8 +117,8 @@ Below are examples of what job options needs to be provided for this shield to b
  ```Json
  {
     "jobOptions":{
-       "entryConditionJsonQuery":"$.traitStates.traitStates[?(@.Temperature.temperatureC)]",
-       "shieldJsonQuery":"$.traitStates.traitStates[?(@.Temperature.temperatureC < 6)]",
+       "entryConditionJsonQueries": ["$.traitStates.traitStates[?(@.Temperature.temperatureC)]"],
+       "shieldJsonQueries": ["$.traitStates.traitStates[?(@.Temperature.temperatureC < 6)]"],
        "actionParams": {
           "hazardTitle":"A low temperature detected !",
           "emailSubject":"Alert from IoT for Insurance",
@@ -133,8 +133,8 @@ Below are examples of what job options needs to be provided for this shield to b
  ```Json
   {
      "jobOptions":{
-        "entryConditionJsonQuery":"$.traitStates.traitStates[?(@.ContactSense.contactDetected)]",
-        "shieldJsonQuery":"$.traitStates.traitStates[?(@.ContactSense.contactDetected == true)]",
+        "entryConditionJsonQueries": ["$.traitStates.traitStates[?(@.ContactSense.contactDetected)]"],
+        "shieldJsonQueries": ["$.traitStates.traitStates[?(@.ContactSense.contactDetected == true)]"],
         "actionParams": {
            "hazardTitle":"A door is opened !",
            "emailSubject":"Alert from IoT for Insurance",
@@ -149,8 +149,8 @@ Below are examples of what job options needs to be provided for this shield to b
  ```Json
    {
       "jobOptions":{
-         "entryConditionJsonQuery":"$.traitStates.traitStates[?(@.WaterSense.waterPresent)]",
-         "shieldJsonQuery":"$.traitStates.traitStates[?(@.WaterSense.waterPresent == true)]",
+         "entryConditionJsonQueries": ["$.traitStates.traitStates[?(@.WaterSense.waterPresent)]"],
+         "shieldJsonQueries": ["$.traitStates.traitStates[?(@.WaterSense.waterPresent == true)]"],
          "actionParams": {
             "hazardTitle":"Water has been detected !",
             "emailSubject":"Alert from IoT for Insurance",
@@ -165,8 +165,8 @@ Below are examples of what job options needs to be provided for this shield to b
  ```Json
     {
        "jobOptions":{
-          "entryConditionJsonQuery":".traitStates.traitStates[?(@.Humidity.humidityPct && @.ContactSense.contactDetected &&  @.Temperature.temperatureC)]",
-          "shieldJsonQuery":"$.traitStates.traitStates[?(@.Humidity.humidityPct>60 && @.Temperature.temperatureC < 6 && @.ContactSense.contactDetected == true && @.WaterSense.waterPresent == true)]",
+          "entryConditionJsonQueries": [".traitStates.traitStates[?(@.Humidity.humidityPct && @.ContactSense.contactDetected &&  @.Temperature.temperatureC)]"],
+          "shieldJsonQueries": ["$.traitStates.traitStates[?(@.Humidity.humidityPct>60 && @.Temperature.temperatureC < 6 && @.ContactSense.contactDetected == true && @.WaterSense.waterPresent == true)]"],
           "actionParams": {
              "hazardTitle":"Hazard has been detected !",
              "emailSubject":"Alert from IoT for Insurance",
@@ -199,8 +199,8 @@ Below are examples of what job options needs to be provided for this shield to b
  ```Json
     {
        "jobOptions":{
-          "entryConditionJsonQuery":"$.d.states[?(@.buttonB0.value || @.buttonBI.value)]",
-          "shieldJsonQuery":"$.d.states[?(@.buttonB0.value == 'released' || @.buttonBI.value == 'released')]",
+          "entryConditionJsonQueries": ["$.d.states[?(@.buttonB0.value || @.buttonBI.value)]"],
+          "shieldJsonQueries": ["$.d.states[?(@.buttonB0.value == 'released' || @.buttonBI.value == 'released')]"],
           "actionParams": {
              "hazardTitle":"A panic button was pressed !",
              "emailSubject":"Alert from IoT for Insurance",
@@ -210,4 +210,20 @@ Below are examples of what job options needs to be provided for this shield to b
     }
  ```  
    
-   
+### Vendor-independent door open shield
+
+It is also possible to have a generic shield that run multiple queries on the incoming events. For example as shown below, we have a door-open shield that accepts events from enocean and wally sensors.
+
+ ```Json
+    {
+       "jobOptions":{
+          "entryConditionJsonQueries": ["$.traitStates.traitStates[?(@.ContactSense.contactDetected)]", "$.d.states[?(@.contact.value)]"],
+          "shieldJsonQueries": ["$.traitStates.traitStates[?(@.ContactSense.contactDetected == true)]", "$.d.states[?(@.contact.value == 'closed')]"],
+          "actionParams": {
+             "hazardTitle":"A door is opened !",
+             "emailSubject":"Alert from IoT for Insurance",
+             "emailText":"Hello IoT for Insurance user. You have a hazard!!!"
+          }
+       }
+    }
+ ```      
