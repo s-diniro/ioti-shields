@@ -1,0 +1,83 @@
+namespace com.ibm.iot4i.examples ;
+
+use com.ibm.iot4i.hazards.MH::* ;
+use com.ibm.iot4i.events.MH::* ;
+use com.ibm.iot4i.models::Hazard ;
+
+composite QueryableSimpleShield
+{
+	param
+	// Params with small letters should be provided by shield developer at submission time,
+	// other params are provided automatically by IoT4i
+
+	    // Kafka params
+		expression<rstring> $KAFKA_BROKERS_SASL :
+			getSubmissionTimeValue("KAFKA_BROKERS_SASL") ;
+		expression<rstring> $USERNAME : getSubmissionTimeValue("USERNAME") ;
+		expression<rstring> $PASSWORD : getSubmissionTimeValue("PASSWORD") ;
+		expression<rstring> $SOURCE_TOPIC : getSubmissionTimeValue("SOURCE_TOPIC") ;
+		expression<rstring> $SINK_TOPIC : getSubmissionTimeValue("SINK_TOPIC") ;
+
+		// Shield JSON queries
+		expression<rstring> $entryConditionJsonQuery :
+			getSubmissionTimeValue("entryConditionJsonQuery") ;
+		expression<rstring> $shieldJsonQuery :
+			getSubmissionTimeValue("shieldJsonQuery") ;
+
+		// Action params
+		expression<rstring> $actionParams : getSubmissionTimeValue("actionParams") ;
+
+		// Other params
+		expression<rstring> $SHIELD_ID : getSubmissionTimeValue("SHIELD_ID") ;
+	graph
+	//  get events from source
+		@view(name = "Events", port = SourceStream, sampleSize = 5, bufferSize = 50)
+		@parallel(width = 1)
+		(stream<rstring userId, rstring key, rstring message> SourceStream) as
+			source = AnnotatedSource()
+		{
+			param
+				KAFKA_BROKERS_SASL : $KAFKA_BROKERS_SASL ;
+				USERNAME : $USERNAME ;
+				PASSWORD : $PASSWORD ;
+				TOPIC : $SOURCE_TOPIC ;
+		}
+
+		//  filter events based on entry condition
+		@view(name = "FilteredEvents", port = FilteredStream, sampleSize = 5,
+			bufferSize = 50)
+		@parallel(width = 1)
+		(stream<rstring userId, rstring key, rstring message> FilteredStream) as
+			filter = Filter(SourceStream)
+		{
+			param
+				filter : executeJsonQuery(message, $entryConditionJsonQuery,
+					"EnteryConditionFilter") ;
+		}
+
+		//  Shield Specific Operators goes here
+		@view(name = "Hazards", port = HazardStream, sampleSize = 5, bufferSize = 50)
+		@parallel(width = 1)
+		(stream<Hazard> HazardStream) as shield = Functor(FilteredStream)
+		{
+			param
+				filter : executeJsonQuery(message, $shieldJsonQuery,
+					"ShieldConditionFilter") ;
+			output
+				HazardStream : userId = userId, rawEvents = "[" + message + "]",
+					actionParams = $actionParams ;
+		}
+
+		//  Submitting Hazards
+		@parallel(width = 1)
+		() as sink = SubmitHazards(HazardStream)
+		{
+			param
+				KAFKA_BROKERS_SASL : $KAFKA_BROKERS_SASL ;
+				USERNAME : $USERNAME ;
+				PASSWORD : $PASSWORD ;
+				TOPIC : $SINK_TOPIC ;
+				SHIELD_ID : $SHIELD_ID ;
+		}
+
+}
