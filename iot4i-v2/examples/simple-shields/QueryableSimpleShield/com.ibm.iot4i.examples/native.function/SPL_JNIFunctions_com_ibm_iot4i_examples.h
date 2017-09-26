@@ -14,7 +14,7 @@ namespace examples {
 class SPL_JNIFunctions {
 public:
 
-// Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Tue Sep 26 04:59:40 EDT 2017
+// Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Tue Sep 26 09:23:08 EDT 2017
 static SPL::boolean executeJsonQuery(SPL::ustring const & arg1, SPL::ustring const & arg2, SPL::ustring const & arg3) {
     static __thread void *func;
     static __thread jclass classGlobalRef;
@@ -41,13 +41,13 @@ static SPL::boolean executeJsonQuery(SPL::ustring const & arg1, SPL::ustring con
     return result;
 }
 
-// Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Tue Sep 26 04:59:40 EDT 2017
+// Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Tue Sep 26 09:23:08 EDT 2017
 static SPL::boolean executeJsonQuery(SPL::rstring const & arg1, SPL::rstring const & arg2, SPL::rstring const & arg3) {
     SPL::boolean result = executeJsonQuery(SPL::ustring::fromUTF8(arg1), SPL::ustring::fromUTF8(arg2), SPL::ustring::fromUTF8(arg3));
     return result;
 }
 
-// Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Tue Sep 26 04:59:40 EDT 2017
+// Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Tue Sep 26 09:23:08 EDT 2017
 template <SPL::int32 msize>
 static SPL::boolean executeJsonQuery(SPL::bstring<msize> const & arg1, SPL::bstring<msize> const & arg2, SPL::bstring<msize> const & arg3) {
     SPL::boolean result = executeJsonQuery((SPL::rstring) arg1, (SPL::rstring) arg2, (SPL::rstring) arg3);

@@ -5,7 +5,7 @@
     <cppNamespaceName>SPL::JNIFunctions::com::ibm::iot4i::examples::SPL_JNIFunctions</cppNamespaceName>
     <functions>
       <function>
-        <!--Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Tue Sep 26 04:59:40 EDT 2017-->
+        <!--Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Tue Sep 26 09:23:08 EDT 2017-->
         <prototype><![CDATA[<string T> public boolean executeJsonQuery(T message, T jsonQuery, T operatorName)]]></prototype>
         <javaFunctionName>public static boolean com.ibm.iot4i.examples.ExecuteJsonQueryImpl.executeJsonQuery(java.lang.String,java.lang.String,java.lang.String)</javaFunctionName>
       </function>
