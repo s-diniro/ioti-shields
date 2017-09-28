@@ -1,0 +1,106 @@
+namespace com.ibm.iot4i.examples ;
+
+use com.ibm.iot4i.hazards.MH::* ;
+use com.ibm.iot4i.events.MH::* ;
+use com.ibm.iot4i.models::Hazard ;
+type SensorEventDataSchema = rstring userId, rstring key, rstring message ;
+
+composite QueryableComplexShield
+{
+	param
+	// Params with small letters should be provided by shield developer at submission time,
+	// other params are provided automatically by IoT4i
+
+	// Kafka params
+		expression<rstring> $KAFKA_BROKERS_SASL :
+			getSubmissionTimeValue("KAFKA_BROKERS_SASL") ;
+		expression<rstring> $USERNAME : getSubmissionTimeValue("USERNAME") ;
+		expression<rstring> $PASSWORD : getSubmissionTimeValue("PASSWORD") ;
+		expression<rstring> $SOURCE_TOPIC : getSubmissionTimeValue("SOURCE_TOPIC") ;
+		expression<rstring> $SINK_TOPIC : getSubmissionTimeValue("SINK_TOPIC") ;
+
+		// Stream 1 params
+		expression<list<rstring>> $stream1EntryConditionJsonQueries :(list<rstring>)
+			getSubmissionTimeValue("stream1EntryConditionJsonQueries") ;
+		expression<int32> $stream1SlidingWindowInSeconds :(int32)
+			getSubmissionTimeValue("stream1SlidingWindowInSeconds") ;
+
+			// Stream 2 params
+		expression<list<rstring>> $stream2EntryConditionJsonQueries :(list<rstring>)
+			getSubmissionTimeValue("stream2EntryConditionJsonQueries") ;
+
+			// Action params
+		expression<rstring> $actionParams : getSubmissionTimeValue("actionParams") ;
+
+		// Other params
+		expression<rstring> $SHIELD_ID : getSubmissionTimeValue("SHIELD_ID") ;
+	graph
+		(stream<SensorEventDataSchema> SourceStream) as source = AnnotatedSource()
+		{
+			param
+				KAFKA_BROKERS_SASL : $KAFKA_BROKERS_SASL ;
+				USERNAME : $USERNAME ;
+				PASSWORD : $PASSWORD ;
+				TOPIC : $SOURCE_TOPIC ;
+		}
+
+		stream<SensorEventDataSchema> Stream1 = PrepareStream(SourceStream)
+		{
+			param
+				entryCondition : $stream1EntryConditionJsonQueries ;
+				streamName : "Stream1" ;
+		}
+
+		stream<SensorEventDataSchema> Stream2 = PrepareStream(SourceStream)
+		{
+			param
+				entryCondition : $stream2EntryConditionJsonQueries ;
+				streamName : "Stream2" ;
+		}
+
+		stream<Hazard> HazardStream = Join(Stream2 ; Stream1)
+		{
+			window
+				Stream2 : sliding, count(0), partitioned ;
+				Stream1 : sliding, time($stream1SlidingWindowInSeconds), partitioned ;
+			param
+				algorithm : inner ;
+				partitionByLHS : Stream2.userId ;
+				partitionByRHS : Stream1.userId ;
+				equalityLHS : Stream2.userId ;
+				equalityRHS : Stream1.userId ;
+			output
+				HazardStream : userId = Stream1.userId, rawEvents = "[" + Stream1.message +
+					"," + Stream2.message + "]", actionParams = $actionParams ;
+		}
+
+		//  Submitting Hazards
+		@catch(exception = all, tupleTrace = true, stackTrace = true)
+		() as sink = SubmitHazards(HazardStream)
+		{
+			param
+				KAFKA_BROKERS_SASL : $KAFKA_BROKERS_SASL ;
+				USERNAME : $USERNAME ;
+				PASSWORD : $PASSWORD ;
+				TOPIC : $SINK_TOPIC ;
+				SHIELD_ID : $SHIELD_ID ;
+		}
+
+}
+
+composite PrepareStream(input stream<SensorEventDataSchema> SourceStream ;
+	output stream<SensorEventDataSchema> PreparedStream)
+{
+	param
+		expression<list<rstring>> $entryCondition ;
+		expression<rstring> $streamName ;
+	graph
+		(stream<SensorEventDataSchema> PreparedStream) as filter =
+			Filter(SourceStream)
+		{
+			param
+				filter : executeJsonQuery(message, $entryCondition, $streamName
+					+ "EnteryConditionFilter") ;
+		}
+
+}
