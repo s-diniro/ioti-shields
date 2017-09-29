@@ -32,7 +32,7 @@ public class ExecuteJsonQueryImpl {
 
 			for (String jsonQuery : jsonQueries) {
 				// check if the query is encoded
-				if (!jsonQuery.substring(0, 1).equals("$")) {
+				if (!jsonQuery.startsWith("$")) {
 					try {
 						byte[] decodedQueryBytes = Base64.getDecoder().decode(jsonQuery);
 						jsonQuery = new String(decodedQueryBytes);
