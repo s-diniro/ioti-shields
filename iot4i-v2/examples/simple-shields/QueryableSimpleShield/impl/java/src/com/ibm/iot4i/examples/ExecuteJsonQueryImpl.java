@@ -54,9 +54,7 @@ public class ExecuteJsonQueryImpl {
 
 			logger.log(Level.WARN, operatorName + ": Event failed json query");
 			return false;
-		} catch (
-
-		Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			logger.log(Level.WARN, operatorName + ": Executing json query failed, error: " + e.getMessage());
 			return false;
