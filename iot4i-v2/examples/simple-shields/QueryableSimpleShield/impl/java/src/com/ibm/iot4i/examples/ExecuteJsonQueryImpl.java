@@ -1,5 +1,6 @@
 package com.ibm.iot4i.examples;
 
+import java.util.Base64;
 import java.util.List;
 
 import org.apache.log4j.Level;
@@ -30,6 +31,19 @@ public class ExecuteJsonQueryImpl {
 			Object parsedRawEvent = conf.jsonProvider().parse(rawEvent);
 
 			for (String jsonQuery : jsonQueries) {
+				// check if the query is encoded
+				if (!jsonQuery.substring(0, 1).equals("$")) {
+					try {
+						byte[] decodedQueryBytes = Base64.getDecoder().decode(jsonQuery);
+						jsonQuery = new String(decodedQueryBytes);
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.log(Level.ERROR,
+								operatorName + ": Decoding base 64 string failed: " + e.getLocalizedMessage());
+						return false;
+					}
+				}
+
 				logger.log(Level.WARN, operatorName + ": Json query: " + jsonQuery);
 				List<Object> results = JsonPath.read(parsedRawEvent, jsonQuery);
 				if (results.size() != 0) {
@@ -40,7 +54,9 @@ public class ExecuteJsonQueryImpl {
 
 			logger.log(Level.WARN, operatorName + ": Event failed json query");
 			return false;
-		} catch (Exception e) {
+		} catch (
+
+		Exception e) {
 			e.printStackTrace();
 			logger.log(Level.WARN, operatorName + ": Executing json query failed, error: " + e.getMessage());
 			return false;
