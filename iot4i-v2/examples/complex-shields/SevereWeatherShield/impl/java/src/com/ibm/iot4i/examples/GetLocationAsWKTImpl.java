@@ -23,9 +23,6 @@ public class GetLocationAsWKTImpl {
 		try {
 			JsonObject jsonMessage = null;
 			jsonMessage = new JsonParser().parse(message).getAsJsonObject();
-			if (isSensorEvent) {
-				jsonMessage = jsonMessage.getAsJsonObject("event");
-			}
 			logger.log(Level.WARN, "Location to check: " + jsonMessage.toString());
 			Feature feature = (Feature) GeoJSONFactory.create(jsonMessage.get("location").getAsJsonObject().toString());
 			GeoJSONReader reader = new GeoJSONReader();
