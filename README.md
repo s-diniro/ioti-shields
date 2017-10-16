@@ -1,3 +1,5 @@
+[Derecated]. Use public repo: https://github.com/ibm-watson-iot/ioti-shields
+
 ## iot4i-v1
 
 Contains the sample shields for IoT4i version 1.
