@@ -23,6 +23,9 @@ composite QueryableSimpleShield
 			getSubmissionTimeValue("entryConditionJsonQueries") ;
 		expression<list<rstring>> $shieldJsonQueries :(list<rstring>)
 			getSubmissionTimeValue("shieldJsonQueries") ;
+			
+		expression<rstring> $hazardTimeInterval : getSubmissionTimeValue("hazardTimeInterval", "0") ;
+		expression<rstring> $hazardNeedsStateReset : getSubmissionTimeValue("hazardNeedsStateReset", "false") ;
 
 		// Action params
 		expression<rstring> $actionParams : getSubmissionTimeValue("actionParams") ;
@@ -52,7 +55,7 @@ composite QueryableSimpleShield
 		{
 			param
 				filter : executeJsonQuery(message, $entryConditionJsonQueries,
-					"EnteryConditionFilter") ;
+					"EnteryConditionFilter", $hazardTimeInterval, $hazardNeedsStateReset) ;
 		}
 
 		//  Shield Specific Operators goes here
@@ -62,7 +65,7 @@ composite QueryableSimpleShield
 		{
 			param
 				filter : executeJsonQuery(message, $shieldJsonQueries,
-					"ShieldConditionFilter") ;
+					"ShieldConditionFilter", $hazardTimeInterval, $hazardNeedsStateReset) ;
 			output
 				HazardStream : userId = userId, rawEvents = "[" + message + "]",
 					actionParams = $actionParams ;

@@ -1,7 +1,9 @@
 package com.ibm.iot4i.examples;
 
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -21,10 +23,15 @@ public class ExecuteJsonQueryImpl {
 			.addOptions(Option.ALWAYS_RETURN_LIST).addOptions(Option.SUPPRESS_EXCEPTIONS);
 
 	static Logger logger = Logger.getLogger(ExecuteJsonQueryImpl.class);
+	
+	static Map<String, Long> timePeriodCache = new HashMap<>();
+	static Map<String, Boolean> stateCache = new HashMap<>();
 
 	@Function(namespace = "com.ibm.iot4i.examples", name = "executeJsonQuery", description = "", stateful = false)
-	public static boolean executeJsonQuery(String message, String[] jsonQueries, String operatorName) {
+	public static boolean executeJsonQuery(String message, String[] jsonQueries, String operatorName, String _timePeriod, String _needResetState) {
 		try {
+			int timePeriod = Integer.parseInt(_timePeriod);
+			boolean needResetState = Boolean.parseBoolean(_needResetState);
 			JsonObject messageJson = new JsonParser().parse(message).getAsJsonObject();
 			String rawEvent = messageJson.getAsJsonObject("event").toString();
 			logger.log(Level.WARN, operatorName + ": Incoming event: " + rawEvent);
@@ -44,12 +51,23 @@ public class ExecuteJsonQueryImpl {
 					}
 				}
 
+				String vendorId = messageJson.get("vendorId").getAsString();				
 				logger.log(Level.WARN, operatorName + ": Json query: " + jsonQuery);
 				List<Object> results = JsonPath.read(parsedRawEvent, jsonQuery);
-				if (results.size() != 0) {
+				Long eventTime = messageJson.getAsJsonObject("event").get("ts").getAsLong();
+				if (eventTime != null) {
+					eventTime = messageJson.get("arrivedAtMH").getAsLong();
+				}
+				boolean timeDidPass = eventTime - timePeriodCache.get(vendorId) > timePeriod;
+				boolean stateChanged = needResetState && stateCache.get(vendorId) != results.isEmpty();
+				
+				if (!results.isEmpty() && (timeDidPass || stateChanged)) {
 					logger.log(Level.WARN, operatorName + ": Event passed json query, results: " + results);
+					timePeriodCache.put(vendorId, eventTime);
+					stateCache.put(vendorId, true);
 					return true;
 				}
+				stateCache.remove(vendorId);				
 			}
 
 			logger.log(Level.WARN, operatorName + ": Event failed json query");
