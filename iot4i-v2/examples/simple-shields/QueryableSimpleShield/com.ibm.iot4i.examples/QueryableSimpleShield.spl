@@ -55,7 +55,7 @@ composite QueryableSimpleShield
 		{
 			param
 				filter : executeJsonQuery(message, $entryConditionJsonQueries,
-					"EnteryConditionFilter", $hazardTimeInterval, $hazardNeedsStateReset) ;
+					"EnteryConditionFilter", "0", "false") ;
 		}
 
 		//  Shield Specific Operators goes here

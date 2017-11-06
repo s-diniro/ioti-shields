@@ -5,12 +5,12 @@
     <cppNamespaceName>SPL::JNIFunctions::com::ibm::iot4i::examples::SPL_JNIFunctions</cppNamespaceName>
     <functions>
       <function>
-        <!--Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Fri Nov 03 12:38:20 EDT 2017-->
+        <!--Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Mon Nov 06 03:58:03 EST 2017-->
         <prototype><![CDATA[<string T> public boolean executeJsonQuery(T message, list<T> jsonQueries, T operatorName, T _timePeriod, T _needResetState)]]></prototype>
         <javaFunctionName>public static boolean com.ibm.iot4i.examples.ExecuteJsonQueryImpl.executeJsonQuery(java.lang.String,java.lang.String[],java.lang.String,java.lang.String,java.lang.String)</javaFunctionName>
       </function>
       <function>
-        <!--Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Fri Nov 03 12:38:20 EDT 2017-->
+        <!--Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Mon Nov 06 03:58:03 EST 2017-->
         <prototype><![CDATA[<string T> [N] public boolean executeJsonQuery(T message, list<T>[N] jsonQueries, T operatorName, T _timePeriod, T _needResetState)]]></prototype>
         <javaFunctionName>public static boolean com.ibm.iot4i.examples.ExecuteJsonQueryImpl.executeJsonQuery(java.lang.String,java.lang.String[],java.lang.String,java.lang.String,java.lang.String)</javaFunctionName>
       </function>
