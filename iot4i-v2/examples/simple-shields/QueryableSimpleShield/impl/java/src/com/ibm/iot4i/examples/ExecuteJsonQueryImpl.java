@@ -1,5 +1,6 @@
 package com.ibm.iot4i.examples;
 
+import java.time.Instant;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Map;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.ibm.streams.function.model.Function;
@@ -28,7 +30,7 @@ public class ExecuteJsonQueryImpl {
 	static Map<String, Boolean> stateCache = new HashMap<>();
 
 	@Function(namespace = "com.ibm.iot4i.examples", name = "executeJsonQuery", description = "", stateful = false)
-	public static boolean executeJsonQuery(String message, String[] jsonQueries, String operatorName, String _timePeriod, String _needResetState) {
+	public static boolean executeJsonQuery(String message, String[] jsonQueries, String operatorName, String _timePeriod, String _needResetState, String eventTimeKey) {
 		try {
 			int timePeriod = Integer.parseInt(_timePeriod);
 			boolean needResetState = Boolean.parseBoolean(_needResetState);
@@ -54,11 +56,24 @@ public class ExecuteJsonQueryImpl {
 				String vendorId = messageJson.get("vendorId").getAsString();				
 				logger.log(Level.WARN, operatorName + ": Json query: " + jsonQuery);
 				List<Object> results = JsonPath.read(parsedRawEvent, jsonQuery);
-				Long eventTime = messageJson.getAsJsonObject("event").get("ts").getAsLong();
-				if (eventTime != null) {
-					eventTime = messageJson.get("arrivedAtMH").getAsLong();
+				
+				boolean timeDidPass = false;
+				Long eventTime = null;
+				if (timePeriod > 0) {
+					List<String> eventTimeElement = JsonPath.read(parsedRawEvent, eventTimeKey);					
+					if (!eventTimeElement.isEmpty()) {
+						boolean isNumber = eventTimeElement.get(0).chars().allMatch(Character::isDigit);
+						if (isNumber) {
+							eventTime = Long.parseLong(eventTimeElement.get(0));
+						} else {
+							eventTime = Instant.parse(eventTimeElement.get(0)).getEpochSecond();		
+						}									
+					} else {
+						eventTime = Instant.parse(messageJson.get("arrivedAtMH").getAsString()).getEpochSecond();
+					}
+					timeDidPass = eventTime - timePeriodCache.get(vendorId) > timePeriod;
 				}
-				boolean timeDidPass = eventTime - timePeriodCache.get(vendorId) > timePeriod;
+						
 				boolean stateChanged = needResetState && stateCache.get(vendorId) != results.isEmpty();
 				
 				if (!results.isEmpty() && (timeDidPass || stateChanged)) {
