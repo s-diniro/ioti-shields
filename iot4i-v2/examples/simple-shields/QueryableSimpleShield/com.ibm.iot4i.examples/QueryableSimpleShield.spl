@@ -3,6 +3,7 @@ namespace com.ibm.iot4i.examples ;
 use com.ibm.iot4i.hazards.MH::* ;
 use com.ibm.iot4i.events.MH::* ;
 use com.ibm.iot4i.models::Hazard ;
+use com.ibm.iot4i.examples::JsonQueryStateTimeFilterOP ;
 
 composite QueryableSimpleShield
 {
@@ -10,7 +11,7 @@ composite QueryableSimpleShield
 	// Params with small letters should be provided by shield developer at submission time,
 	// other params are provided automatically by IoT4i
 
-	    // Kafka params
+	// Kafka params
 		expression<rstring> $KAFKA_BROKERS_SASL :
 			getSubmissionTimeValue("KAFKA_BROKERS_SASL") ;
 		expression<rstring> $USERNAME : getSubmissionTimeValue("USERNAME") ;
@@ -23,12 +24,14 @@ composite QueryableSimpleShield
 			getSubmissionTimeValue("entryConditionJsonQueries") ;
 		expression<list<rstring>> $shieldJsonQueries :(list<rstring>)
 			getSubmissionTimeValue("shieldJsonQueries") ;
-			
-		expression<rstring> $hazardTimeInterval : getSubmissionTimeValue("hazardTimeInterval", "0") ;
-		expression<rstring> $hazardNeedsStateReset : getSubmissionTimeValue("hazardNeedsStateReset", "false") ;
-		expression<rstring> $eventTimePath : getSubmissionTimeValue("eventTimePath", "$.ts") ;
+		expression<rstring> $hazardTimeInterval :
+			getSubmissionTimeValue("hazardTimeInterval", "0") ;
+		expression<rstring> $hazardNeedsStateReset :
+			getSubmissionTimeValue("hazardNeedsStateReset", "false") ;
+		expression<rstring> $eventTimePath : getSubmissionTimeValue("eventTimePath",
+			"$.ts") ;
 
-		// Action params
+			// Action params
 		expression<rstring> $actionParams : getSubmissionTimeValue("actionParams") ;
 
 		// Other params
@@ -47,32 +50,39 @@ composite QueryableSimpleShield
 				TOPIC : $SOURCE_TOPIC ;
 		}
 
-		//  filter events based on entry condition
+		@parallel(width = 1)
 		@view(name = "FilteredEvents", port = FilteredStream, sampleSize = 5,
 			bufferSize = 50)
-		@parallel(width = 1)
-		(stream<rstring userId, rstring key, rstring message> FilteredStream) as
-			filter = Filter(SourceStream)
+		stream<rstring userId, rstring key, rstring message> FilteredStream = JsonQueryStateTimeFilterOP(SourceStream)
 		{
 			param
-				filter : executeJsonQuery(message, $entryConditionJsonQueries,
-					"EnteryConditionFilter", "0", "false", "") ;
+				jsonQueries : (rstring) $entryConditionJsonQueries ;
+				timePeriod : "0" ;
+				needResetState : "false" ;
+				eventTimeKey : "" ;
 		}
 
-		//  Shield Specific Operators goes here
-		@view(name = "Hazards", port = HazardStream, sampleSize = 5, bufferSize = 50)
 		@parallel(width = 1)
-		(stream<Hazard> HazardStream) as shield = Functor(FilteredStream)
+		@view(name = "ShieldEvents", port = ShieldStream, sampleSize = 5, bufferSize =
+			50)
+		stream<rstring userId, rstring key, rstring message> ShieldStream = JsonQueryStateTimeFilterOP(FilteredStream)
 		{
 			param
-				filter : executeJsonQuery(message, $shieldJsonQueries,
-					"ShieldConditionFilter", $hazardTimeInterval, $hazardNeedsStateReset, $eventTimePath) ;
+				jsonQueries :  (rstring)$shieldJsonQueries ;
+				timePeriod : $hazardTimeInterval ;
+				needResetState : $hazardNeedsStateReset ;
+				eventTimeKey : $eventTimePath ;
+		}
+		
+		@parallel(width = 1)
+		@view(name = "HazardStream", port = HazardStream, sampleSize = 5, bufferSize =
+			50)
+		stream<Hazard> HazardStream = Functor(ShieldStream)
+		{
 			output
-				HazardStream : userId = userId, rawEvents = "[" + message + "]",
-					actionParams = $actionParams ;
+				HazardStream: userId = userId, rawEvents = "[" + message + "]", actionParams = $actionParams;
 		}
 
-		//  Submitting Hazards
 		@parallel(width = 1)
 		() as sink = SubmitHazards(HazardStream)
 		{

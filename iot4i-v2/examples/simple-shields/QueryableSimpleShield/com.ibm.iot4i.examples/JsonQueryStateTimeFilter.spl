@@ -1,0 +1,22 @@
+namespace com.ibm.iot4i.examples ;
+
+composite JsonQueryStateTimeFilter(
+	input stream<rstring userId, rstring key,rstring message> SourceStream ; 
+	output stream<rstring userId, rstring key, rstring message> OutStream)
+{
+	param
+		expression<list<rstring>> $jsonQueries;
+		expression<rstring> $timePeriod ;
+		expression<rstring> $needResetState ;
+		expression<rstring> $eventTimeKey ;
+	graph
+		stream<rstring userId, rstring key, rstring message> OutStream = JsonQueryStateTimeFilterOP(SourceStream)
+		{
+			param
+				jsonQueries : $jsonQueries ;
+				timePeriod : $timePeriod ;
+				needResetState : $needResetState ;
+				eventTimeKey : $eventTimeKey ;
+		}
+
+}
