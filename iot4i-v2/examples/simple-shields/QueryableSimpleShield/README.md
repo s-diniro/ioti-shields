@@ -118,7 +118,10 @@ Below are examples of what job options needs to be provided for this shield to b
           "hazardTitle":"A potential water leak was detected by the humidity sensor.",
           "emailSubject":"Alert from IoT for Insurance",
           "emailText":"Hello IoT for Insurance user. You have a hazard!!!"
-       }
+       },
+       "hazardTimeInterval": 3600,
+       "hazardNeedsStateReset": true,
+       "eventTimePath": "$.traitStates.traitStates.Humidity.updated"
     }
  }
  ```
@@ -134,33 +137,13 @@ Below are examples of what job options needs to be provided for this shield to b
           "hazardTitle":"A low temperature detected !",
           "emailSubject":"Alert from IoT for Insurance",
           "emailText":"Hello IoT for Insurance user. You have a hazard!!!"
-       }
+       },
+       "hazardTimeInterval": 3600,
+       "hazardNeedsStateReset": true,
+       "eventTimePath": "$.traitStates.traitStates.Temperature.updated"
     }
  }
  ``` 
-##### For this events we highly suggest to add state
-  ```Json
-  {
-     "jobOptions":{
-        "entryConditionJsonQueries": ["$.traitStates.traitStates[?(@.Temperature.temperatureC)]"],
-        "shieldJsonQueries": ["$.traitStates.traitStates[?(@.Temperature.temperatureC < 6)]"],
-        "actionParams": {
-           "hazardTitle":"A low temperature detected !",
-           "emailSubject":"Alert from IoT for Insurance",
-           "emailText":"Hello IoT for Insurance user. You have a hazard!!!"
-        },
-        "hazardTimeInterval": 3600,
-        "hazardNeedsStateReset": true,
-        "eventTimePath": "$.traitStates.traitStates.Temperature.updated"
-     }
-  }
-  ``` 
-  
-In this case a hazard will be generated only once. 
-Only after the temperature went over 6° again a new hazard will be generated.
-If `hazardTimeInterval` is specified, it will only generate the hazard after the time passed since the last hazard,
-even if the state changed.
-
  
 #### Wally door open shield
   
@@ -173,7 +156,10 @@ even if the state changed.
            "hazardTitle":"A door is opened !",
            "emailSubject":"Alert from IoT for Insurance",
            "emailText":"Hello IoT for Insurance user. You have a hazard!!!"
-        }
+        },
+        "hazardTimeInterval": 3600,
+        "hazardNeedsStateReset": true,
+        "eventTimePath": "$.traitStates.traitStates.ContactSense.updated"
      }
   }
   ``` 
@@ -189,7 +175,10 @@ even if the state changed.
             "hazardTitle":"Water has been detected !",
             "emailSubject":"Alert from IoT for Insurance",
             "emailText":"Hello IoT for Insurance user. You have a hazard!!!"
-         }
+         },
+         "hazardTimeInterval": 3600,
+         "hazardNeedsStateReset": true,
+         "eventTimePath": "$.traitStates.traitStates.WaterSense.updated"
       }
    }
  ```  
