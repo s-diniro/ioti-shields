@@ -125,6 +125,10 @@ Below are examples of what job options needs to be provided for this shield to b
     }
  }
  ```
+ In this case a hazard will be generated only once. 
+ Only after the humidityPct went over 60 again a new hazard will be generated.
+ If `hazardTimeInterval` is specified, it will only generate the hazard after the time passed since the last hazard,
+ even if the state changed.
 
 #### Wally temperature shield
  
