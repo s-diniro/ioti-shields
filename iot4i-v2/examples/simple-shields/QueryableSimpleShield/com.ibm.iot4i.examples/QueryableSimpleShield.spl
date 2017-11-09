@@ -29,7 +29,7 @@ composite QueryableSimpleShield
 		expression<rstring> $hazardNeedsStateReset :
 			getSubmissionTimeValue("hazardNeedsStateReset", "false") ;
 		expression<rstring> $eventTimePath : getSubmissionTimeValue("eventTimePath",
-			"$.ts") ;
+			"$.timestamp") ;
 
 			// Action params
 		expression<rstring> $actionParams : getSubmissionTimeValue("actionParams") ;
@@ -50,37 +50,41 @@ composite QueryableSimpleShield
 				TOPIC : $SOURCE_TOPIC ;
 		}
 
-		@parallel(width = 1)
+		@parallel(width = 5)
 		@view(name = "FilteredEvents", port = FilteredStream, sampleSize = 5,
 			bufferSize = 50)
-		stream<rstring userId, rstring key, rstring message> FilteredStream = JsonQueryStateTimeFilterOP(SourceStream)
+		stream<rstring userId, rstring key, rstring message, rstring vendorId>
+			FilteredStream = JsonQueryStateTimeFilterOP(SourceStream)
 		{
 			param
-				jsonQueries : (rstring) $entryConditionJsonQueries ;
+				jsonQueries :(rstring) $entryConditionJsonQueries ;
 				timePeriod : "0" ;
 				needResetState : "false" ;
 				eventTimeKey : "" ;
 		}
 
-		@parallel(width = 1)
-		@view(name = "ShieldEvents", port = ShieldStream, sampleSize = 5, bufferSize =
-			50)
-		stream<rstring userId, rstring key, rstring message> ShieldStream = JsonQueryStateTimeFilterOP(FilteredStream)
+		@parallel(width = 5, partitionBy = [ { port = FilteredStream, attributes = [
+			vendorId ] } ])
+		@view(name = "ShieldEvents", port = ShieldStream, sampleSize = 5,
+			bufferSize = 50)
+		stream<rstring userId, rstring key, rstring message> ShieldStream =
+			JsonQueryStateTimeFilterOP(FilteredStream)
 		{
 			param
-				jsonQueries :  (rstring)$shieldJsonQueries ;
+				jsonQueries :(rstring) $shieldJsonQueries ;
 				timePeriod : $hazardTimeInterval ;
 				needResetState : $hazardNeedsStateReset ;
 				eventTimeKey : $eventTimePath ;
 		}
-		
+
 		@parallel(width = 1)
-		@view(name = "HazardStream", port = HazardStream, sampleSize = 5, bufferSize =
-			50)
+		@view(name = "HazardStream", port = HazardStream, sampleSize = 5,
+			bufferSize = 50)
 		stream<Hazard> HazardStream = Functor(ShieldStream)
 		{
 			output
-				HazardStream: userId = userId, rawEvents = "[" + message + "]", actionParams = $actionParams;
+				HazardStream : userId = userId, rawEvents = "[" + message + "]",
+					actionParams = $actionParams ;
 		}
 
 		@parallel(width = 1)
@@ -92,6 +96,10 @@ composite QueryableSimpleShield
 				PASSWORD : $PASSWORD ;
 				TOPIC : $SINK_TOPIC ;
 				SHIELD_ID : $SHIELD_ID ;
+		}
+
+		() as JobControlPlane_6 = JobControlPlane()
+		{
 		}
 
 }

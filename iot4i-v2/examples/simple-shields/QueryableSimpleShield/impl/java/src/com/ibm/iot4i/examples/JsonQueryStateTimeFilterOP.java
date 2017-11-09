@@ -98,6 +98,9 @@ public class JsonQueryStateTimeFilterOP extends AbstractOperator implements Stat
 			StreamingOutput<OutputTuple> outStream = getOutput(0);
 			OutputTuple outTuple = outStream.newTuple();
 			outTuple.assign(tuple);
+			JsonObject messageObj = new JsonParser().parse(tuple.getString("message")).getAsJsonObject();
+			String vendorId = messageObj.get("vendorId").getAsString();
+			outTuple.setString("vendorId", vendorId);
 			outStream.submit(outTuple);
 		}
 	}
