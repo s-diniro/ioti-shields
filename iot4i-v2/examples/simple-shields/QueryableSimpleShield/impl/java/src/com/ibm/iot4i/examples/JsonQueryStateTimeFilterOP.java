@@ -115,19 +115,7 @@ public class JsonQueryStateTimeFilterOP extends AbstractOperator implements Stat
 			DocumentContext parsedRawEvent = JsonPath.using(conf).parse(rawEvent);
 
 			for (String jsonQuery : jsonQueries) {
-				// check if the query is encoded
-				logger.log(Level.WARN, operatorName + ": jsonQuery: " + jsonQuery);
-				if (!jsonQuery.startsWith("$")) {
-					try {
-						byte[] decodedQueryBytes = Base64.getDecoder().decode(jsonQuery);
-						jsonQuery = new String(decodedQueryBytes);
-					} catch (Exception e) {
-						e.printStackTrace();
-						logger.log(Level.ERROR,
-								operatorName + ": Decoding base 64 string failed: " + e.getLocalizedMessage() + jsonQuery);
-						return false;
-					}
-				}
+				// check if the query is encoded		
 
 				String vendorId = messageJson.get("vendorId").getAsString();				
 				logger.log(Level.WARN, operatorName + ": Json query: " + jsonQuery);
