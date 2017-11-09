@@ -50,7 +50,7 @@ composite QueryableSimpleShield
 				TOPIC : $SOURCE_TOPIC ;
 		}
 
-		@parallel(width = 5)
+		@parallel(width = 1)
 		@view(name = "FilteredEvents", port = FilteredStream, sampleSize = 5,
 			bufferSize = 50)
 		stream<rstring userId, rstring key, rstring message, rstring vendorId>
@@ -63,12 +63,13 @@ composite QueryableSimpleShield
 				eventTimeKey : "" ;
 		}
 
-		@parallel(width = 5, partitionBy = [ { port = FilteredStream, attributes = [
+		@parallel(width = 2, partitionBy = [ { port = FilteredStream, attributes = [
 			vendorId ] } ])
+		@consistent(trigger = periodic, period = 10.0)
 		@view(name = "ShieldEvents", port = ShieldStream, sampleSize = 5,
 			bufferSize = 50)
-		stream<rstring userId, rstring key, rstring message> ShieldStream =
-			JsonQueryStateTimeFilterOP(FilteredStream)
+		stream<rstring userId, rstring key, rstring message, rstring vendorId>
+			ShieldStream = JsonQueryStateTimeFilterOP(FilteredStream)
 		{
 			param
 				jsonQueries :(rstring) $shieldJsonQueries ;
@@ -78,6 +79,7 @@ composite QueryableSimpleShield
 		}
 
 		@parallel(width = 1)
+		@autonomous
 		@view(name = "HazardStream", port = HazardStream, sampleSize = 5,
 			bufferSize = 50)
 		stream<Hazard> HazardStream = Functor(ShieldStream)

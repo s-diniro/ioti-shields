@@ -26,6 +26,7 @@ import com.ibm.streams.operator.model.Libraries;
 import com.ibm.streams.operator.model.OutputPortSet;
 import com.ibm.streams.operator.model.OutputPortSet.WindowPunctuationOutputMode;
 import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
 import com.ibm.streams.operator.model.OutputPorts;
@@ -111,7 +112,7 @@ public class JsonQueryStateTimeFilterOP extends AbstractOperator implements Stat
 			JsonObject messageJson = new JsonParser().parse(message).getAsJsonObject();
 			String rawEvent = messageJson.getAsJsonObject("event").toString();
 			logger.log(Level.WARN, operatorName + ": Incoming event: " + rawEvent);
-			Object parsedRawEvent = conf.jsonProvider().parse(rawEvent);
+			DocumentContext parsedRawEvent = JsonPath.using(conf).parse(rawEvent);
 
 			for (String jsonQuery : jsonQueries) {
 				// check if the query is encoded
@@ -130,21 +131,24 @@ public class JsonQueryStateTimeFilterOP extends AbstractOperator implements Stat
 
 				String vendorId = messageJson.get("vendorId").getAsString();				
 				logger.log(Level.WARN, operatorName + ": Json query: " + jsonQuery);
-				List<Object> results = JsonPath.read(parsedRawEvent, jsonQuery);
+				List<Object> results = parsedRawEvent.read(jsonQuery);
 				logger.log(Level.WARN, operatorName + ": Json query results: " + results);				
 				
 				boolean timeDidPass = false;
-				Long eventTime = null;
+				Long eventTime = (long) -1;
 				if (timePeriod > 0) {
-					Object eventTimeElement = JsonPath.read(parsedRawEvent, eventTimeKey);			
-					if (eventTimeElement != null) {
+					List<Object> timestamps = parsedRawEvent.read(eventTimeKey);
+					for(Object eventTimeElement: timestamps) {
 						boolean isNumber = eventTimeElement.toString().chars().allMatch(Character::isDigit);
+						Long otherTime;
 						if (isNumber) {
-							eventTime = Long.parseLong(eventTimeElement.toString());
+							otherTime = Long.parseLong(eventTimeElement.toString());
 						} else {
-							eventTime = Instant.parse(eventTimeElement.toString()).getEpochSecond();		
-						}									
-					} else {
+							otherTime = Instant.parse(eventTimeElement.toString()).getEpochSecond();		
+						}
+						eventTime = Math.max(otherTime, eventTime);
+					}												
+					if (eventTime == -1) {
 						eventTime = Instant.parse(messageJson.get("arrivedAtMH").getAsString()).getEpochSecond();
 					}
 					timeDidPass = eventTime - timePeriodCache.getOrDefault(vendorId, (long) 0) > timePeriod;
