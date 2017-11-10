@@ -14,14 +14,14 @@ namespace examples {
 class SPL_JNIFunctions {
 public:
 
-// Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Fri Sep 29 10:11:43 EDT 2017
-static SPL::boolean executeJsonQuery(SPL::ustring const & arg1, SPL::list<ustring> const & arg2, SPL::ustring const & arg3) {
+// Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Tue Nov 07 05:31:37 EST 2017
+static SPL::boolean executeJsonQuery(SPL::ustring const & arg1, SPL::list<ustring> const & arg2, SPL::ustring const & arg3, SPL::ustring const & arg4, SPL::ustring const & arg5, SPL::ustring const & arg6) {
     static __thread void *func;
     static __thread jclass classGlobalRef;
     static __thread jmethodID mid;
     static __thread jclass stringClass;
     if (func == NULL) {
-        func = SPL::SPLJavaFunction::loadFunction("QuerableSimpleShield", "1.0.0", SPLJAVAFUNCTION_ADL_FILENAME, "impl/java/bin", "com.ibm.iot4i.examples.ExecuteJsonQueryImpl", "executeJsonQuery", "(Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Z", "com.ibm.iot4i.examples", "<string T> public boolean executeJsonQuery(T message, list<T> jsonQueries, T operatorName)", &classGlobalRef, &mid);
+        func = SPL::SPLJavaFunction::loadFunction("QuerableSimpleShield", "1.1.0", SPLJAVAFUNCTION_ADL_FILENAME, "impl/java/bin", "com.ibm.iot4i.examples.ExecuteJsonQueryImpl", "executeJsonQuery", "(Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z", "com.ibm.iot4i.examples", "<string T> public stateful boolean executeJsonQuery(T message, list<T> jsonQueries, T operatorName, T _timePeriod, T _needResetState, T eventTimeKey)", &classGlobalRef, &mid);
         JNIEnv* env = SPL::SPLJavaFunction::getJNIEnv(func);
         stringClass = env->FindClass("java/lang/String");
     }
@@ -48,46 +48,58 @@ static SPL::boolean executeJsonQuery(SPL::ustring const & arg1, SPL::list<ustrin
     jstring obj3 = env->NewString((jchar *) arg3.getBuffer(), (jsize) arg3.length());
     if (env->ExceptionCheck())
         SPL::SPLJavaFunction::throwCreateError(func);
-    SPL::boolean result = env->CallStaticBooleanMethod(classGlobalRef, mid, obj1, obj2, obj3);
+    jstring obj4 = env->NewString((jchar *) arg4.getBuffer(), (jsize) arg4.length());
+    if (env->ExceptionCheck())
+        SPL::SPLJavaFunction::throwCreateError(func);
+    jstring obj5 = env->NewString((jchar *) arg5.getBuffer(), (jsize) arg5.length());
+    if (env->ExceptionCheck())
+        SPL::SPLJavaFunction::throwCreateError(func);
+    jstring obj6 = env->NewString((jchar *) arg6.getBuffer(), (jsize) arg6.length());
+    if (env->ExceptionCheck())
+        SPL::SPLJavaFunction::throwCreateError(func);
+    SPL::boolean result = env->CallStaticBooleanMethod(classGlobalRef, mid, obj1, obj2, obj3, obj4, obj5, obj6);
     if (env->ExceptionCheck())
         SPL::SPLJavaFunction::throwCallError(func);
     env->DeleteLocalRef(obj1);
     env->DeleteLocalRef(obj2);
     env->DeleteLocalRef(obj3);
+    env->DeleteLocalRef(obj4);
+    env->DeleteLocalRef(obj5);
+    env->DeleteLocalRef(obj6);
     return result;
 }
 
-// Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Fri Sep 29 10:11:43 EDT 2017
+// Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Tue Nov 07 05:31:37 EST 2017
 template <SPL::int32 lsize>
-static SPL::boolean executeJsonQuery(SPL::ustring const & arg1, SPL::blist<ustring, lsize> const & arg2, SPL::ustring const & arg3) {
-    SPL::boolean result = executeJsonQuery(arg1, (SPL::list<ustring>) arg2, arg3);
+static SPL::boolean executeJsonQuery(SPL::ustring const & arg1, SPL::blist<ustring, lsize> const & arg2, SPL::ustring const & arg3, SPL::ustring const & arg4, SPL::ustring const & arg5, SPL::ustring const & arg6) {
+    SPL::boolean result = executeJsonQuery(arg1, (SPL::list<ustring>) arg2, arg3, arg4, arg5, arg6);
     return result;
 }
 
-// Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Fri Sep 29 10:11:43 EDT 2017
-static SPL::boolean executeJsonQuery(SPL::rstring const & arg1, SPL::list<rstring> const & arg2, SPL::rstring const & arg3) {
-    SPL::boolean result = executeJsonQuery(SPL::ustring::fromUTF8(arg1), (SPL::list<ustring>) arg2, SPL::ustring::fromUTF8(arg3));
+// Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Tue Nov 07 05:31:37 EST 2017
+static SPL::boolean executeJsonQuery(SPL::rstring const & arg1, SPL::list<rstring> const & arg2, SPL::rstring const & arg3, SPL::rstring const & arg4, SPL::rstring const & arg5, SPL::rstring const & arg6) {
+    SPL::boolean result = executeJsonQuery(SPL::ustring::fromUTF8(arg1), (SPL::list<ustring>) arg2, SPL::ustring::fromUTF8(arg3), SPL::ustring::fromUTF8(arg4), SPL::ustring::fromUTF8(arg5), SPL::ustring::fromUTF8(arg6));
     return result;
 }
 
-// Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Fri Sep 29 10:11:43 EDT 2017
+// Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Tue Nov 07 05:31:37 EST 2017
 template <SPL::int32 lsize>
-static SPL::boolean executeJsonQuery(SPL::rstring const & arg1, SPL::blist<rstring, lsize> const & arg2, SPL::rstring const & arg3) {
-    SPL::boolean result = executeJsonQuery(arg1, (SPL::list<rstring>) arg2, arg3);
+static SPL::boolean executeJsonQuery(SPL::rstring const & arg1, SPL::blist<rstring, lsize> const & arg2, SPL::rstring const & arg3, SPL::rstring const & arg4, SPL::rstring const & arg5, SPL::rstring const & arg6) {
+    SPL::boolean result = executeJsonQuery(arg1, (SPL::list<rstring>) arg2, arg3, arg4, arg5, arg6);
     return result;
 }
 
-// Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Fri Sep 29 10:11:43 EDT 2017
+// Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Tue Nov 07 05:31:37 EST 2017
 template <SPL::int32 msize>
-static SPL::boolean executeJsonQuery(SPL::bstring<msize> const & arg1, SPL::list<bstring<msize> > const & arg2, SPL::bstring<msize> const & arg3) {
-    SPL::boolean result = executeJsonQuery((SPL::rstring) arg1, (SPL::list<rstring>) arg2, (SPL::rstring) arg3);
+static SPL::boolean executeJsonQuery(SPL::bstring<msize> const & arg1, SPL::list<bstring<msize> > const & arg2, SPL::bstring<msize> const & arg3, SPL::bstring<msize> const & arg4, SPL::bstring<msize> const & arg5, SPL::bstring<msize> const & arg6) {
+    SPL::boolean result = executeJsonQuery((SPL::rstring) arg1, (SPL::list<rstring>) arg2, (SPL::rstring) arg3, (SPL::rstring) arg4, (SPL::rstring) arg5, (SPL::rstring) arg6);
     return result;
 }
 
-// Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Fri Sep 29 10:11:43 EDT 2017
+// Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Tue Nov 07 05:31:37 EST 2017
 template <SPL::int32 msize, SPL::int32 lsize>
-static SPL::boolean executeJsonQuery(SPL::bstring<msize> const & arg1, SPL::blist<bstring<msize>, lsize> const & arg2, SPL::bstring<msize> const & arg3) {
-    SPL::boolean result = executeJsonQuery(arg1, (SPL::list<bstring<msize> >) arg2, arg3);
+static SPL::boolean executeJsonQuery(SPL::bstring<msize> const & arg1, SPL::blist<bstring<msize>, lsize> const & arg2, SPL::bstring<msize> const & arg3, SPL::bstring<msize> const & arg4, SPL::bstring<msize> const & arg5, SPL::bstring<msize> const & arg6) {
+    SPL::boolean result = executeJsonQuery(arg1, (SPL::list<bstring<msize> >) arg2, arg3, arg4, arg5, arg6);
     return result;
 }
 

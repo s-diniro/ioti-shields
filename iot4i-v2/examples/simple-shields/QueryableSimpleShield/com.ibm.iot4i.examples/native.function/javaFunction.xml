@@ -5,14 +5,14 @@
     <cppNamespaceName>SPL::JNIFunctions::com::ibm::iot4i::examples::SPL_JNIFunctions</cppNamespaceName>
     <functions>
       <function>
-        <!--Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Fri Sep 29 10:11:43 EDT 2017-->
-        <prototype><![CDATA[<string T> public boolean executeJsonQuery(T message, list<T> jsonQueries, T operatorName)]]></prototype>
-        <javaFunctionName>public static boolean com.ibm.iot4i.examples.ExecuteJsonQueryImpl.executeJsonQuery(java.lang.String,java.lang.String[],java.lang.String)</javaFunctionName>
+        <!--Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Tue Nov 07 05:31:37 EST 2017-->
+        <prototype><![CDATA[<string T> public stateful boolean executeJsonQuery(T message, list<T> jsonQueries, T operatorName, T _timePeriod, T _needResetState, T eventTimeKey)]]></prototype>
+        <javaFunctionName>public static boolean com.ibm.iot4i.examples.ExecuteJsonQueryImpl.executeJsonQuery(java.lang.String,java.lang.String[],java.lang.String,java.lang.String,java.lang.String,java.lang.String)</javaFunctionName>
       </function>
       <function>
-        <!--Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Fri Sep 29 10:11:43 EDT 2017-->
-        <prototype><![CDATA[<string T> [N] public boolean executeJsonQuery(T message, list<T>[N] jsonQueries, T operatorName)]]></prototype>
-        <javaFunctionName>public static boolean com.ibm.iot4i.examples.ExecuteJsonQueryImpl.executeJsonQuery(java.lang.String,java.lang.String[],java.lang.String)</javaFunctionName>
+        <!--Generated from com.ibm.iot4i.examples.ExecuteJsonQueryImpl in impl/java/bin/com/ibm/iot4i/examples/ExecuteJsonQueryImpl$StreamsModel.class at Tue Nov 07 05:31:37 EST 2017-->
+        <prototype><![CDATA[<string T> [N] public stateful boolean executeJsonQuery(T message, list<T>[N] jsonQueries, T operatorName, T _timePeriod, T _needResetState, T eventTimeKey)]]></prototype>
+        <javaFunctionName>public static boolean com.ibm.iot4i.examples.ExecuteJsonQueryImpl.executeJsonQuery(java.lang.String,java.lang.String[],java.lang.String,java.lang.String,java.lang.String,java.lang.String)</javaFunctionName>
       </function>
     </functions>
     <dependencies>

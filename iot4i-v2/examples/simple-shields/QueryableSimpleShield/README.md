@@ -1,7 +1,11 @@
 # Queryable shield for single source 
 
 
-This shield is using simple Json queries for the events coming from a single data source. The json queries are based on [JsonPath](https://github.com/json-path/JsonPath). The json queries are simple to learn since they use the same structure as XPath expressions. To test your json queries, you can use this [website](http://jsonpath.herokuapp.com/). You could simply put the event data coming from the sensor in a json format and run the json queries against it.
+This shield is using simple Json queries for the events coming from a single data source. 
+The json queries are based on [JsonPath](https://github.com/json-path/JsonPath). 
+The json queries are simple to learn since they use the same structure as XPath expressions. 
+To test your json queries, you can use this [website](http://jsonpath.herokuapp.com/). 
+You could simply put the event data coming from the sensor in a json format and run the json queries against it.
 
 ## How shield works
 
@@ -21,6 +25,9 @@ This shield expects the following parameters:
 
 - **entryConditionJsonQueries** : the json queries used to provide an entry condition to filter events that doesn't belong to this shield.
 - **shieldJsonQueries** : the json queries used to provide the main shield logic
+- **hazardTimeInterval** : the minimum time between hazards (in seconds)
+- **hazardNeedsStateReset** : if `true`, only generate new hazard if state changed
+- **eventTimePath** : required for `hazardTimeInterval`, the jsonPath to the event's timestamp
 - **actionParams** : the params needed by the external action, example is shown below:
 
 ```json
@@ -39,8 +46,12 @@ These parameters needs to be provided when submitting/updating the shield code u
 {
    "jobOptions":{
       "entryConditionJsonQueries": ["", ""],
-      "shieldJsonQueries": ["" , ""],
-      "actionParams": ""
+      "shieldJsonQueries": ["" , ""],      
+      "actionParams": "",
+      // optional, values here are the default ones
+      "hazardTimeInterval": 0 // in seconds,
+      "hazardNeedsStateReset": false // only create new hazard if state changed,
+      "eventTimePath": "$.timestamp" // path to events timestamp
    }
 }
  
@@ -107,10 +118,17 @@ Below are examples of what job options needs to be provided for this shield to b
           "hazardTitle":"A potential water leak was detected by the humidity sensor.",
           "emailSubject":"Alert from IoT for Insurance",
           "emailText":"Hello IoT for Insurance user. You have a hazard!!!"
-       }
+       },
+       "hazardTimeInterval": 3600,
+       "hazardNeedsStateReset": true,
+       "eventTimePath": "$.traitStates.traitStates.Humidity.updated"
     }
  }
  ```
+ In this case a hazard will be generated only once. 
+ Only after the humidityPct went over 60 again a new hazard will be generated.
+ If `hazardTimeInterval` is specified, it will only generate the hazard after the time passed since the last hazard,
+ even if the state changed.
 
 #### Wally temperature shield
  
@@ -123,7 +141,10 @@ Below are examples of what job options needs to be provided for this shield to b
           "hazardTitle":"A low temperature detected !",
           "emailSubject":"Alert from IoT for Insurance",
           "emailText":"Hello IoT for Insurance user. You have a hazard!!!"
-       }
+       },
+       "hazardTimeInterval": 3600,
+       "hazardNeedsStateReset": true,
+       "eventTimePath": "$.traitStates.traitStates.Temperature.updated"
     }
  }
  ``` 
@@ -139,7 +160,10 @@ Below are examples of what job options needs to be provided for this shield to b
            "hazardTitle":"A door is opened !",
            "emailSubject":"Alert from IoT for Insurance",
            "emailText":"Hello IoT for Insurance user. You have a hazard!!!"
-        }
+        },
+        "hazardTimeInterval": 3600,
+        "hazardNeedsStateReset": true,
+        "eventTimePath": "$.traitStates.traitStates.ContactSense.updated"
      }
   }
   ``` 
@@ -155,7 +179,10 @@ Below are examples of what job options needs to be provided for this shield to b
             "hazardTitle":"Water has been detected !",
             "emailSubject":"Alert from IoT for Insurance",
             "emailText":"Hello IoT for Insurance user. You have a hazard!!!"
-         }
+         },
+         "hazardTimeInterval": 3600,
+         "hazardNeedsStateReset": true,
+         "eventTimePath": "$.traitStates.traitStates.WaterSense.updated"
       }
    }
  ```  
