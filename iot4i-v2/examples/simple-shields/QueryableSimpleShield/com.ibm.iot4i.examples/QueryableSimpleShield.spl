@@ -63,9 +63,9 @@ composite QueryableSimpleShield
 				eventTimeKey : "" ;
 		}
 
-		@parallel(width = 2, partitionBy = [ { port = FilteredStream, attributes = [
+		@parallel(width = 1, partitionBy = [ { port = FilteredStream, attributes = [
 			vendorId ] } ])
-		@consistent(trigger = periodic, period = 10.0)
+		//@consistent(trigger = periodic, period = 10.0)
 		@view(name = "ShieldEvents", port = ShieldStream, sampleSize = 5,
 			bufferSize = 50)
 		stream<rstring userId, rstring key, rstring message, rstring vendorId>

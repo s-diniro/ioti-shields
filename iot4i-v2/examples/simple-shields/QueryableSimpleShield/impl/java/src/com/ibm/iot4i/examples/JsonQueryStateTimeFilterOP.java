@@ -46,7 +46,7 @@ import com.google.gson.JsonParser;
 		@OutputPortSet(description = "Port that produces tuples", cardinality = 1, optional = false, windowPunctuationOutputMode = WindowPunctuationOutputMode.Generating) })
 public class JsonQueryStateTimeFilterOP extends AbstractOperator implements StateHandler {
 	
-	static Configuration conf = Configuration.defaultConfiguration().addOptions(Option.AS_PATH_LIST)
+	static Configuration conf = Configuration.defaultConfiguration()
 			.addOptions(Option.ALWAYS_RETURN_LIST).addOptions(Option.SUPPRESS_EXCEPTIONS);
 	static Logger logger = Logger.getLogger(JsonQueryStateTimeFilterOP.class);
 	
@@ -120,9 +120,10 @@ public class JsonQueryStateTimeFilterOP extends AbstractOperator implements Stat
 				String vendorId = messageJson.get("vendorId").getAsString();				
 				logger.log(Level.WARN, operatorName + ": Json query: " + jsonQuery);
 				List<Object> results = parsedRawEvent.read(jsonQuery);
-				logger.log(Level.WARN, operatorName + ": Json query results: " + results);				
+				logger.log(Level.WARN, operatorName + ": Json query results: " + results);		
+				boolean pastJsonQuery = !results.isEmpty();
 				
-				boolean timeDidPass = false;
+				Boolean timeDidPass = null;
 				Long eventTime = (long) -1;
 				if (timePeriod > 0) {
 					List<Object> timestamps = parsedRawEvent.read(eventTimeKey);
@@ -142,15 +143,18 @@ public class JsonQueryStateTimeFilterOP extends AbstractOperator implements Stat
 					timeDidPass = eventTime - timePeriodCache.getOrDefault(vendorId, (long) 0) > timePeriod;
 				}
 						
-				boolean stateChanged = true;
-				if (needResetState && stateCache.containsKey(vendorId)) {
-					stateChanged = stateCache.get(vendorId) != (!results.isEmpty());
+				Boolean stateChanged = null;
+				if (needResetState) {
+					stateChanged = false;
+					if (!stateCache.containsKey(vendorId) && pastJsonQuery) {
+						stateChanged = true;	
+					}					
 				}
 				logger.log(Level.WARN, operatorName + ": needResetState: " + needResetState);
 				logger.log(Level.WARN, operatorName + ": stateChanged: " + stateChanged);
 				logger.log(Level.WARN, operatorName + ": timeDidPass: " + timeDidPass);
-				logger.log(Level.WARN, operatorName + ": timePeriodCache: " + timePeriodCache);
-				logger.log(Level.WARN, operatorName + ": stateCache: " + stateCache);
+				logger.log(Level.WARN, operatorName + ": timePeriodCache: " + timePeriodCache.getOrDefault(vendorId, null));
+				logger.log(Level.WARN, operatorName + ": stateCache: " + stateCache.getOrDefault(vendorId, null));
 				
 				if (!results.isEmpty()) {
 					if (needResetState && !stateChanged) {
@@ -162,8 +166,13 @@ public class JsonQueryStateTimeFilterOP extends AbstractOperator implements Stat
 						return false;
 					}
 					logger.log(Level.WARN, operatorName + ": Event passed json query, results: " + results);
-					timePeriodCache.put(vendorId, eventTime);
-					stateCache.put(vendorId, true);
+					
+					if (timePeriod > 0) {
+						timePeriodCache.put(vendorId, eventTime);	
+					}					
+					if (needResetState) {
+						stateCache.put(vendorId, true);	
+					}					
 					return true;
 				}
 				if (stateCache.containsKey(vendorId)) {
@@ -187,8 +196,7 @@ public class JsonQueryStateTimeFilterOP extends AbstractOperator implements Stat
 	}
 
 	@Override
-	public void checkpoint(Checkpoint checkpoint) throws Exception {
-		logger.log(Level.WARN, "Checkpointing maps."); 		
+	public void checkpoint(Checkpoint checkpoint) throws Exception {		
 		checkpoint.getOutputStream().writeObject(this.stateCache);
 		checkpoint.getOutputStream().writeObject(this.timePeriodCache);
 	}
