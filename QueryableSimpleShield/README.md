@@ -1,34 +1,34 @@
 # Queryable shield for single source 
 
 
-This shield is using simple Json queries for the events coming from a single data source. 
-The json queries are based on [JsonPath](https://github.com/json-path/JsonPath). 
-The json queries are simple to learn since they use the same structure as XPath expressions. 
-To test your json queries, you can use this [website](http://jsonpath.herokuapp.com/). 
-You could simply put the event data coming from the sensor in a json format and run the json queries against it.
+The queryable simple shield, also known as the queryable shield for single source, uses simple JSON queries for the events that come from a single data source. 
+The JSON queries are based on [JSONPath](https://github.com/json-path/JsonPath). 
+The JSON queries are simple to learn as they use the same structure as XPath expressions. 
+To test your JSON queries, you can use the [JSONPath Evaluator website](http://jsonpath.herokuapp.com/). 
+You can put the event data coming from the sensor in a JSON format and run the JSON queries against it.
 
-## How shield works
+## How the shield works
 
-The shield has two IBM streams operators as explained below:
+The shield has the following IBM streams operators:
 
-1. A [Filter operator](https://www.ibm.com/support/knowledgecenter/en/SSCRJU_4.2.1/com.ibm.streams.toolkits.doc/spldoc/dita/tk$spl/op$spl.relational$Filter.html) at the beginning of the shield which filter events based on an entry conditions. 
-2. A [Functor operator](https://www.ibm.com/support/knowledgecenter/en/SSCRJU_4.2.1/com.ibm.streams.toolkits.doc/spldoc/dita/tk$spl/op$spl.relational$Functor.html) that generate hazards based on shield conditions.
+1. A [Filter operator](https://www.ibm.com/support/knowledgecenter/en/SSCRJU_4.2.1/com.ibm.streams.toolkits.doc/spldoc/dita/tk$spl/op$spl.relational$Filter.html) at the beginning of the shield which filter events that are based on an entry conditions. 
+2. A [Functor operator](https://www.ibm.com/support/knowledgecenter/en/SSCRJU_4.2.1/com.ibm.streams.toolkits.doc/spldoc/dita/tk$spl/op$spl.relational$Functor.html) that generate hazards that are based on shield conditions.
 
-Both operators uses json queries as an input which is executed using a helper java function [executeJsonQuery(message, query)](./impl/java/src/com/ibm/iot4i/examples/ExecuteJsonQueryImpl.java).
+Both operators use JSON queries as an input which is executed by using a helper Java function [executeJsonQuery(message, query)](./impl/java/src/com/ibm/iot4i/examples/ExecuteJsonQueryImpl.java).
 
 ![Queryable Simple Shield](./images/queryable-simple-shield.png)
 
 
-## Using shield
+## Using the shield
 
 This shield expects the following parameters:
 
-- **entryConditionJsonQueries** : the json queries used to provide an entry condition to filter events that doesn't belong to this shield.
-- **shieldJsonQueries** : the json queries used to provide the main shield logic
-- **hazardTimeInterval** : the minimum time between hazards (in seconds)
-- **hazardNeedsStateReset** : if `true`, only generate new hazard if state changed
-- **eventTimePath** : required for `hazardTimeInterval`, the jsonPath to the event's timestamp
-- **actionParams** : the params needed by the external action, example is shown below:
+- **entryConditionJsonQueries** : The JSON queries that provide an entry condition to filter events that do not belong to this shield.
+- **shieldJsonQueries** : The JSON queries that provide the main shield logic.
+- **hazardTimeInterval** : The minimum time between hazards in seconds.
+- **hazardNeedsStateReset** : If `true`, generates a new hazard only if the state changes.
+- **eventTimePath** : The JSONPath to the event's timestamp. Required for `hazardTimeInterval`.
+- **actionParams** : The parameters that are needed by the external action as shown in the example below:
 
 ```json
 {
@@ -40,7 +40,7 @@ This shield expects the following parameters:
  ```
 
 
-These parameters needs to be provided when submitting/updating the shield code using the [createShieldCode API](https://ioti.us-south.containers.mybluemix.net/docs/#!/shield-codes/createShieldCode) or [updateShieldCode API](https://ioti.us-south.containers.mybluemix.net/docs/#!/shield-codes/updateShieldCode). The parameters are provided as part of the **jobOptions** field like:
+These parameters need to be provided when creating or updating the shield code by using the [createShieldCode API](https://ioti.us-south.containers.mybluemix.net/docs/#!/shield-codes/createShieldCode) or the [updateShieldCode API](https://ioti.us-south.containers.mybluemix.net/docs/#!/shield-codes/updateShieldCode). The parameters are provided as part of the **jobOptions** field as shown in the following example:
  
  ```json
 {
@@ -59,11 +59,13 @@ These parameters needs to be provided when submitting/updating the shield code u
 
 ## Examples
 
-Here are some examples of what this shield can do. 
+The following Wally shield, EnOcean shield, and vendor independent shield examples demonstrate what the queryable simple shield can do.
 
 ### Wally Shields 
 
-Below are examples of what job options needs to be provided for this shield to behave differently and cover different use cases based on wally sensor event data. An example of wally sensor event is shown below:
+The following Wally shield examples show what job options need to be provided for this shield to behave differently and cover different use cases that are based on Wally sensor event data. 
+
+The following example is of a Wally sensor event:
 
  ```json
 {
@@ -125,10 +127,9 @@ Below are examples of what job options needs to be provided for this shield to b
     }
  }
  ```
- In this case a hazard will be generated only once. 
- Only after the humidityPct went over 60 again a new hazard will be generated.
- If `hazardTimeInterval` is specified, it will only generate the hazard after the time passed since the last hazard,
- even if the state changed.
+ In this case a hazard is generated only once. 
+ A new hazard will be generated only after the humidityPct goes over 60 again.
+ If `hazardTimeInterval` is specified, the hazard is generated only after the time interval has passed since the last hazard even if the state changed.
 
 #### Wally temperature shield
  
@@ -221,7 +222,7 @@ Below are examples of what job options needs to be provided for this shield to b
    }
 }
 ```  
-#### Enocean panic button shield
+#### EnOcean panic button shield
     
  ```Json
     {
@@ -239,7 +240,7 @@ Below are examples of what job options needs to be provided for this shield to b
    
 ### Vendor-independent door open shield
 
-It is also possible to have a generic shield that run multiple queries on the incoming events. For example as shown below, we have a door-open shield that accepts events from enocean and wally sensors.
+It is also possible to have a generic shield that runs multiple queries on the incoming events. In the following example, the door open shield accepts events from EnOcean and Wally sensors.
 
  ```Json
     {
