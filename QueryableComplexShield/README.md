@@ -1,28 +1,30 @@
 # Queryable complex shield
 
-This shield shows how to join two data streams together to support more complex use cases. The shield is also using simple Json queries to filter streams events. The json queries are based on [JsonPath](https://github.com/json-path/JsonPath). To test your json queries, you can use this [website](http://jsonpath.herokuapp.com/). There, you could simply put the event data coming from the sensor in a json format and run the json queries against it.  
+This shield shows how to join two data streams together to support more complex use cases. The shield is also using simple JSON queries to filter streams events. The JSON queries are based on [JSONPath](https://github.com/json-path/JsonPath). 
 
-## How shield works
+To test your JSON queries, you can use the [JSONPath Evaluator website](http://jsonpath.herokuapp.com/). You can put the event data coming from the sensor in a JSON format and run the JSON queries against it.  
 
-The shield has two IBM streams operators as explained below:
+## How the shield works
+
+The shield has the following IBM streams operators:
 
 1. A [Filter operator](https://www.ibm.com/support/knowledgecenter/en/SSCRJU_4.2.1/com.ibm.streams.toolkits.doc/spldoc/dita/tk$spl/op$spl.relational$Filter.html) at the beginning of each data stream to filter the events based on the shield logic.
-2. A [Join operator](https://www.ibm.com/support/knowledgecenter/en/SSCRJU_4.2.1/com.ibm.streams.toolkits.doc/spldoc/dita/tk$spl/op$spl.relational$Join.html) which is a power operator that allows you to correlate events from two streams that are based on user-specified match predicates and window configurations. This operator is used in this shield to join, and partition the two streams based on event's userId. 
+2. A [Join operator](https://www.ibm.com/support/knowledgecenter/en/SSCRJU_4.2.1/com.ibm.streams.toolkits.doc/spldoc/dita/tk$spl/op$spl.relational$Join.html), which is a power operator that enables you to correlate events from two streams that are based on user-specified match predicates and window configurations. This operator is used in this shield to join and partition the two streams based on an event's userId. 
 
-The events in both streams are filtered using json queries as an input which is executed using a helper java function [executeJsonQuery(message, query)](./impl/java/src/com/ibm/iot4i/examples/ExecuteJsonQueryImpl.java).
+The events in both streams are filtered by using JSON queries as an input which is executed by a helper Java function [executeJsonQuery(message, query)](./impl/java/src/com/ibm/iot4i/examples/ExecuteJsonQueryImpl.java).
 
 The main shield code is [here](./com.ibm.iot4i.examples/QueryableComplexShield.spl)
 
 ![Queryable Complex Shield](./images/queryable-complex-shield.png)
 
-## Using shield
+## Using the shield
 
 This shield expects the following parameters:
 
-- **stream1EntryConditionJsonQueries** : the json queries used to provide an entry condition to filter events that doesn't belong to this shield.
-- **stream2EntryConditionJsonQueries** : the json queries used to provide the main shield logic
-- **stream1SlidingWindowInSeconds** : the Time-based eviction policy time in seconds for the first stream. For more information, check IBM streams sliding windows [here](https://developer.ibm.com/streamsdev/2014/08/22/spl-sliding-windows-explained/).
-- **actionParams** : the params needed by the external action, example is shown below:
+- **stream1EntryConditionJsonQueries** : The JSON queries that provide an entry condition to filter events that do not belong to this shield.
+- **stream2EntryConditionJsonQueries** : The JSON queries that provide the main shield logic.
+- **stream1SlidingWindowInSeconds** : The time-based eviction policy time in seconds for the first stream. For more information, see [SPL sliding windows explained](https://developer.ibm.com/streamsdev/2014/08/22/spl-sliding-windows-explained/).
+- **actionParams** : The parameters that are needed by the external action, as shwon in the following example:
 
 ```json
 {
@@ -34,7 +36,7 @@ This shield expects the following parameters:
  ```
 
 
-These parameters needs to be provided when submitting/updating the shield code using the [createShieldCode API](https://ioti.us-south.containers.mybluemix.net/docs/#!/shield-codes/createShieldCode) or [updateShieldCode API](https://ioti.us-south.containers.mybluemix.net/docs/#!/shield-codes/updateShieldCode). The parameters are provided as part of the **jobOptions** field like:
+These parameters need to be provided when creating or updating the shield code by using the [createShieldCode API](https://ioti.us-south.containers.mybluemix.net/docs/#!/shield-codes/createShieldCode) or [updateShieldCode API](https://ioti.us-south.containers.mybluemix.net/docs/#!/shield-codes/updateShieldCode). The parameters are provided as part of the **jobOptions** field as shown in the following example:
  
  ```json
 {
@@ -50,13 +52,13 @@ These parameters needs to be provided when submitting/updating the shield code u
 
 ## Examples
 
-Here are some examples of what this shield can do. 
+The following examples show what this shield can do. 
 
 ### Severe temperature Shield 
 
-The use case for this shield is that it finds out if a house physical window is opened and after some time a severe temperature is detected. The contact sensor events will be in the first stream and temperature events will be in the second stream. The shield will join both streams based on userId and generate a hazard. The time the shield waits after the contact sensor event arrived to check for severe temperature event is configured using the "stream1SlidingWindowInSeconds" parameter.
+The use case for this shield is that it determines if a physical window in a house is opened and after some time a severe temperature is detected. The contact sensor events are in the first stream and temperature events are in the second stream. The shield joins both streams based on userId and generates a hazard. The time that the shield waits after the contact sensor event arrives to check for a severe temperature event is configured by using the `stream1SlidingWindowInSeconds` parameter.
 
-In this example shield we are using wally contact and temperature sensors. 
+This example shield uses the Wally contact and temperature sensors. 
 
 **Wally Contact Sensor Event Payload** :
 
@@ -117,7 +119,7 @@ In this example shield we are using wally contact and temperature sensors.
 ```
 
 
-In this case, the shield **jobOptions** will be like:     
+In this case, the shield **jobOptions** are as follows:     
 
  ```json
 {
