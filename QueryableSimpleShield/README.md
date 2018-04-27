@@ -65,7 +65,7 @@ The following Wally shield, EnOcean shield, and vendor independent shield exampl
 
 The following Wally shield examples show what job options need to be provided for this shield to behave differently and cover different use cases that are based on Wally sensor event data. 
 
-The following example is of a Wally sensor event:
+See the following example of a Wally sensor event:
 
  ```json
 {
@@ -206,7 +206,7 @@ The following example is of a Wally sensor event:
    
 ### Enocean Shields 
 
-Below are examples of what job options needs to be provided for this shield to behave differently and cover different use cases based on enocean sensor event data. An example of enocean sensor event is shown below:   
+The following examples show what job options need to be provided for this shield to behave differently and cover different use cases based on EnOcean sensor event data. See the following example of an EnOcean sensor event:   
 
  ```Json
 {
