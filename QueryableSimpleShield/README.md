@@ -26,7 +26,7 @@ This shield expects the following parameters:
 - **entryConditionJsonQueries** : The JSON queries that provide an entry condition to filter events that do not belong to this shield.
 - **shieldJsonQueries** : The JSON queries that provide the main shield logic.
 - **hazardTimeInterval** : The minimum time between hazards in seconds.
-- **hazardNeedsStateReset** : If `true`, generates a new hazard only if the state changes.
+- **hazardNeedsStateReset** : If set to `true`, the shield generates a new hazard only if the state changes.
 - **eventTimePath** : The JSONPath to the event's timestamp. Required for `hazardTimeInterval`.
 - **actionParams** : The parameters that are needed by the external action as shown in the example below:
 
@@ -40,7 +40,7 @@ This shield expects the following parameters:
  ```
 
 
-These parameters need to be provided when creating or updating the shield code by using the [createShieldCode API](https://ioti.us-south.containers.mybluemix.net/docs/#!/shield-codes/createShieldCode) or the [updateShieldCode API](https://ioti.us-south.containers.mybluemix.net/docs/#!/shield-codes/updateShieldCode). The parameters are provided as part of the **jobOptions** field as shown in the following example:
+These parameters need to be provided when creating or updating the shield code by using [createShieldCode API](https://ioti.us-south.containers.mybluemix.net/docs/#!/shield-codes/createShieldCode) or the [updateShieldCode API](https://ioti.us-south.containers.mybluemix.net/docs/#!/shield-codes/updateShieldCode). The parameters are provided as part of the **jobOptions** field as shown in the following example:
  
  ```json
 {
