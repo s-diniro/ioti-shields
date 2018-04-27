@@ -1,6 +1,6 @@
 # Queryable complex shield
 
-This shield shows how to join two data streams together to support more complex use cases. The shield is also using simple JSON queries to filter streams events. The JSON queries are based on [JSONPath](https://github.com/json-path/JsonPath). 
+This shield shows how to join two data streams together to support more complex use cases. The shield also uses simple JSON queries to filter streams events. The JSON queries are based on [JSONPath](https://github.com/json-path/JsonPath). 
 
 To test your JSON queries, you can use the [JSONPath Evaluator website](http://jsonpath.herokuapp.com/). You can put the event data coming from the sensor in a JSON format and run the JSON queries against it.  
 
@@ -24,7 +24,7 @@ This shield expects the following parameters:
 - **stream1EntryConditionJsonQueries** : The JSON queries that provide an entry condition to filter events that do not belong to this shield.
 - **stream2EntryConditionJsonQueries** : The JSON queries that provide the main shield logic.
 - **stream1SlidingWindowInSeconds** : The time-based eviction policy time in seconds for the first stream. For more information, see [SPL sliding windows explained](https://developer.ibm.com/streamsdev/2014/08/22/spl-sliding-windows-explained/).
-- **actionParams** : The parameters that are needed by the external action, as shwon in the following example:
+- **actionParams** : The parameters that are needed by the external action, as shown in the following example:
 
 ```json
 {
