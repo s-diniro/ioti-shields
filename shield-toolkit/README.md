@@ -1,7 +1,7 @@
 # IoT4I Cloud Shield Toolkit
 
 ## Before you begin  
-**IMPORTANT** the shield toolkit is provided to help better understand the deisgn and logic of IoT4I shields.
+**IMPORTANT** the shield toolkit is provided to help better understand the design and logic of IoT4I shields.
 
 ## Shield toolkit
 An IBM streams shield development toolkit which contains a set of operators and helper function that can help quickly develop shields for IBM IoT for insurance service. The toolkit provides the following:
