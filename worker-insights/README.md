@@ -1,6 +1,6 @@
 # Edge Shields for IBM IoT Worker Insights
 
-Information about IBM IoT Worker Insights is avaialable in our [Knowledge Center(https://www.ibm.com/support/knowledgecenter/SSQNYQ_bas/iot-insurance/safer_workplace/worker_summary.html)
+Information about IBM IoT Worker Insights is available in our [Knowledge Center(https://www.ibm.com/support/knowledgecenter/SSQNYQ_bas/iot-insurance/safer_workplace/worker_summary.html)
 
 # Prerequisites
 1. Download the edge-processing-toolkit from Worker Insights API with your account. [Extending the solution with APIs](https://www.ibm.com/support/knowledgecenter/SSQNYQ_bas/iot-insurance/iotinsurance_rest_apis.html?pos=2)
