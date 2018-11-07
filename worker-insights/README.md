@@ -1,19 +1,16 @@
 # Edge Shields for IBM IoT Worker Insights
 
-You can find more information in our [Knowledge Center]
-(https://www.ibm.com/support/knowledgecenter/SSQNYQ_bas/iot-insurance/safer_workplace/worker_summary.html)
+Information about IBM IoT Worker Insights is available in our [Knowledge Center(https://www.ibm.com/support/knowledgecenter/SSQNYQ_bas/iot-insurance/safer_workplace/worker_summary.html)
 
 # Prerequisites
-1. Download edge-processing-toolkit from Worker Insights API with your account. [Extending the solution with APIs](https://www.ibm.com/support/knowledgecenter/SSQNYQ_bas/iot-insurance/iotinsurance_rest_apis.html?pos=2)
-2. Copy the downloaded javascript file (e.g. edge-toolkit-1.4.4.js) into `sw-edge-processing-toolkit` folder.
+1. Download the edge-processing-toolkit from Worker Insights API with your account. [Extending the solution with APIs](https://www.ibm.com/support/knowledgecenter/SSQNYQ_bas/iot-insurance/iotinsurance_rest_apis.html?pos=2)
+2. Copy the downloaded `edge-toolkit-1.4.4.js` file into `sw-edge-processing-toolkit` folder.
 3. Rename the file to `edge-toolkit.js`
 4. Run `npm install`
 
 ## How to implement a shield
-Edge-processing-toolkit provides a base class to implement new shield. Every shield
-has to extend from this base class `BaseShield`. Below you find an example shield
-which processes heart-rate events. Please take an attention to the comments in the
-code block.
+Edge-processing-toolkit provides a base class to implement new shields. Every shield
+has to extend from this base class, `BaseShield`. the following example shield processes heart-rate events. **Important:** Note the comments in the code block.
 
 ```
 class HeartRateShield extends BaseShield {
@@ -21,11 +18,11 @@ class HeartRateShield extends BaseShield {
   constructor() {
     // Here you can define your shield parameters with default values and options.
     // These default values are used if you don't specify a default value in your
-    // shield-code document. heartRateThreshold parameter is a required parameter
-    // and it has a default value 110. If a shield developer doesn't provide a
-    // default value here and mark this parameter as required and this parameter
-    // doesn't have value in the shield-code document, then this shield cannot be
-    // loaded into job-engine because of missing required parameter value.    
+    // shield-code document. The heartRateThreshold parameter is a required parameter
+    // and it has a default value 110. If you do not provide a default value for 
+    // this parameter and mark it as required, and this parameter does not have value 
+    // in the shield-code document, then this shield cannot be loaded into job-engine, 
+    // because of a missing required parameter value.    
     args.shieldParametersDefinition = {
       minHazardInterval: {
         default: 60,
@@ -46,30 +43,31 @@ class HeartRateShield extends BaseShield {
         description: 'Different titles per hazard'
       }
     };
-    // You should pass all arguments to base class's constructor.
+    // Pass all arguments to base class's constructor.
     super(args);
-    // You can log your messages with the logger object.
+    // Log your messages with the logger object.
     this.logger.info('constructor');
   }
 
 }
 ```
 
-There are 3 steps which each event passes through during the event processing in a shield:
+Each event passes through 3 steps during the event processing in a shield:
 1. entryCondition
 2. preProcessing
 3. processing
 
-`BaseShield` class has 3 methods which implement these 3 steps. Events flow as
-the methods are listed on the following: First, job-engine calls `entryCondition`
-method with a payload. If the payload satisfies entry conditions, then the job-engine
-calls `preProcessing` method with same payload. If the `preProcessing` returns
-either payload or true, the job-engine calls `processing` method with payload
-which is the result of `preProcessing`.
+The `BaseShield` class has 3 methods which implement these 3 steps. The event flow is as
+follows: 
+1. The job-engine calls the `entryCondition` method with a payload. 
+2. If the payload satisfies entry conditions, then the job-engine calls the `preProcessing` method with same payload. 
+3. If the `preProcessing` method returns the payload or `true`, the job-engine calls the `processing` method with the payload, which is the result of `preProcessing`.
 
 `preProcessing` is optional. However, `entryCondition` and `processing` have to be
-implemented in the shield implementation. `BaseShield` class does not have a default
-implementation. Here is the further implementation of our example shield:
+implemented in the shield implementation. The `BaseShield` class does not have a default
+implementation. 
+
+Here is the remaining implementation of our example shield:
 
 ```
 class HeartRateShield extends BaseShield {
@@ -119,27 +117,27 @@ class HeartRateShield extends BaseShield {
 }
 ```
 
-`processing` is a method where you should implement a logic of your shield. If all
-the conditions are satisfied, you want to generate a hazard and send it to the
+`processing` is the method where you should implement a logic of your shield. If all
+of the conditions are satisfied, generate a hazard and send it to the
 job-engine. There is a stream for hazards which comes from `BaseShield`:
-`hazardStream`. You should push your hazard into the `hazardStream`. After you
-push your hazard into `hazardStream`, the job-engine take cares of your hazard.
-That means, the job-engine notifies gateway application or mobile application
-and the related application manages rest lifecycle of your hazard. You can have
-a look `createHazard` method above in order to learn how to push a hazard into
+`hazardStream`. Push your hazard into the `hazardStream`. After you
+push your hazard into `hazardStream`, the job-engine handles your hazard.
+Specifically, the job-engine notifies the gateway application or mobile application. 
+The related application then manages the remaining lifecycle of your hazard. Refer to 
+the `createHazard` method above to learn how to push a hazard into
 the `hazardStream`. **If you push too many hazards into the `hazardStream`, they
 are throttled based on your `minHazardInterval` shield parameter.**
 
 
 ### How to use external libraries in a shield
-You can use any Javascript library to implement your shield. For instance, we used
-[mathjs](https://www.npmjs.com/package/mathjs) npm package in the above example
-shield. You just need to add your npm package in the package.json file and
+You can use any Javascript library to implement your shield. For instance, 
+[mathjs](https://www.npmjs.com/package/mathjs) npm package was used in the example
+shield above. You just need to add your npm package in the package.json file and
 run `npm install`.
 
 
 ### How to fetch external data
-It is not allowed to access filesystem and to make HTTP requests from a shield.
+You cannot access a filesystem and to make HTTP requests from a shield.
 All HTTP requests must go through 'external-data.js'. This functionality is not
 fully implemented yet.
 
@@ -149,25 +147,25 @@ TBD
 
 
 ### How to build and package a shield
-IoT Worker Insights API accepts a single Javascript file per a shield-code.
-Therefore, a shield developer has to have a single file to be able to upload his
-code to the backend. In most cases you have a single Javascript file per shield.
+IoT Worker Insights API accepts a single Javascript file per shield-code.
+Therefore, you must have a single file to upload your code to 
+the backend. In most cases, you have a single Javascript file per shield.
 However, if you want to keep your implementation in more than one Javascript file
 and want to use external libraries, then you need to bundle all the required files
-into a single Javascript file. We use [Webpack](https://webpack.js.org/) to do
-this. You can run `webpack` on the command-line to create your final shield-code
-file. You can find the generated file in the dist directory.
+into a single Javascript file. You can use [Webpack](https://webpack.js.org/) to bundle
+files. You can run `webpack` on the command-line to create your final shield-code
+file. You can find the generated file in the `dist` directory.
 
-If you want to build in development mode, you can just run `npm run build`. For
-production builds, you should use `npm run package`. Uglification and minification
+If you want to build in development mode, you can run `npm run build`. For
+production builds, run `npm run package`. Uglification and minification
 are applied for the production builds. Detailed steps are below:
 
-* Add your shield code to module.export[0].entry in the `<sw-edge-shields>/webpack.config.js`
-* Run `npm run build` or `npm run package`
-* You will find the generated packed file in `<sw-edge-shields>/dist/` directory
-* Create a shield and upload the shield code file via the dashboard
+1. Add your shield code to module.export[0].entry in the `<sw-edge-shields>/webpack.config.js`
+2. Run `npm run build` or `npm run package`
+3. Find the generated packed file in the `<sw-edge-shields>/dist/` directory
+4. Create a shield and upload the shield code file by using the dashboard
 
 ## Test
-Tests are located under tests directory. As long as we don't need webpack pre
-build, we can just `npm run test` directly. Otherwise we need to run `webpack`
-command first and then run mocha on dist/tests-js.
+Tests are located under the `tests` directory. If you do not need webpack before
+building, you can run `npm run test` directly. Otherwise, you need to run the `webpack`
+command and then run `mocha` on `dist/tests-js`.
